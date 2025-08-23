@@ -1,0 +1,78 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.4.9'
+	id 'io.spring.dependency-management' version '1.1.7'
+	id 'maven-publish' // Add this line
+}
+
+group = 'com.rayyau.eshop'
+version = '0.0.1-SNAPSHOT'
+description = 'rayyau-eshop-payment-service'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+repositories {
+	mavenCentral()
+	mavenLocal()
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:2024.0.0"
+	}
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	//openfeign for microservice communication
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+	implementation 'org.projectlombok:lombok:1.18.30'
+	annotationProcessor 'org.projectlombok:lombok:1.18.30'
+	testImplementation 'org.projectlombok:lombok:1.18.30'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+	//Eureka server
+//	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+// Add these lines to publish the library to a local Maven repository
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			groupId = 'com.rayyau.eshop'
+			artifactId = 'eshop-pymt-service'
+			version = '0.0.1-SNAPSHOT'
+
+			from components.java
+		}
+	}
+	repositories {
+		maven {
+			url = uri("$System.env.HOME/.m2/repository") // Local repository directory
+		}
+	}
+}
+
+tasks.register('publishToLocalMaven') {
+	dependsOn publish
+}
+
+jar {
+	archiveBaseName = 'eshop-pymt-service'
+	archiveClassifier = ''  // Ensure no classifier is added
+	archiveVersion = '0.0.1-SNAPSHOT'
+}

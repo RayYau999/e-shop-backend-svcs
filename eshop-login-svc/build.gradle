@@ -1,6 +1,6 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.5.4'
+	id 'org.springframework.boot' version '3.4.9'
 	id 'io.spring.dependency-management' version '1.1.7'
 }
 
@@ -15,12 +15,23 @@ java {
 
 repositories {
 	mavenCentral()
+	mavenLocal()
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:2024.0.0"
+	}
 }
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	//used for exclude eureka client
+	implementation('org.springframework.cloud:spring-cloud-starter-loadbalancer')
+	implementation('org.springframework.retry:spring-retry')
 
 	implementation 'org.projectlombok:lombok:1.18.30'
 	annotationProcessor 'org.projectlombok:lombok:1.18.30'
@@ -32,9 +43,14 @@ dependencies {
 	implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.2.0'
 	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.12.5'
 
+	//openfeign for microservice communication
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	implementation 'com.rayyau.eshop:eshop-pymt-service:0.0.1-SNAPSHOT'
+//	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 
 }
 

@@ -1,4 +1,4 @@
-package com.rayyau.eshop.login;
+package com.rayyau.eshop.pymt;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,10 +6,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @EnableFeignClients
-public class EShopLoginServiceApplication {
+public class EshopPymtServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(EShopLoginServiceApplication.class, args);
+		SpringApplication.run(EshopPymtServiceApplication.class, args);
 	}
 
 }
