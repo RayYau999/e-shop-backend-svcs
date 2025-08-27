@@ -1,4 +1,4 @@
-package com.rayyau.eshop.login.dto;
+package com.rayyau.eshop.pymt.dto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,30 +9,36 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Entity
 @Table(name = "users")
 @AllArgsConstructor
-public class UserEntity {
+public class OrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 50)
-    private String fullName;
+    @Column(nullable = false)
+    private Long userId;
 
-    @Column(nullable = false, length = 30, unique = true)
-    private String username;
+    @Column(nullable = false)
+    private String productId;
 
-    @Column(nullable = false, length = 120)
-    private String password;
+    @Column(nullable = false)
+    private Integer quantity;
+
+    @Column(nullable = false)
+    private Double price;
 
     @Column(nullable = false, length = 20)
-    private String role;
+    private String status;
 
-    private boolean enabled;
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
 
-    public UserEntity() {
+    public OrderEntity() {
+
     }
-
 }

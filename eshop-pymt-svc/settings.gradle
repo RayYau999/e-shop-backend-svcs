@@ -1,0 +1,8 @@
+rootProject.name = 'eshop-pymt-svc'
+
+
+def localDev = true
+if(localDev = true) {
+    includeBuild('../eshop-login-svc')
+    includeBuild('../security-library')
+}

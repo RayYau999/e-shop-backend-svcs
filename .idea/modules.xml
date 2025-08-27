@@ -3,10 +3,12 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/e-shop-backend-svcs.iml" filepath="$PROJECT_DIR$/.idea/e-shop-backend-svcs.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/eshop-login-svc.main.iml" filepath="$PROJECT_DIR$/.idea/modules/eshop-login-svc.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/eshop-login-svc.test.iml" filepath="$PROJECT_DIR$/.idea/modules/eshop-login-svc.test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/eshop-pymt-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/eshop-pymt-service.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/eshop-pymt-service.test.iml" filepath="$PROJECT_DIR$/.idea/modules/eshop-pymt-service.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/914176097/eshop-login-svc.main.iml" filepath="$PROJECT_DIR$/.idea/modules/914176097/eshop-login-svc.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/914176097/eshop-login-svc.test.iml" filepath="$PROJECT_DIR$/.idea/modules/914176097/eshop-login-svc.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/eshop-pymt-svc.main.iml" filepath="$PROJECT_DIR$/.idea/modules/eshop-pymt-svc.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/eshop-pymt-svc.test.iml" filepath="$PROJECT_DIR$/.idea/modules/eshop-pymt-svc.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1528376009/security-library.main.iml" filepath="$PROJECT_DIR$/.idea/modules/-1528376009/security-library.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1528376009/security-library.test.iml" filepath="$PROJECT_DIR$/.idea/modules/-1528376009/security-library.test.iml" />
     </modules>
   </component>
 </project>
