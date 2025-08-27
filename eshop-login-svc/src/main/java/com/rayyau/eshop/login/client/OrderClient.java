@@ -8,7 +8,7 @@ import com.rayyau.eshop.pymt.dto.Order;
 
 import java.util.List;
 
-@FeignClient(name = "eshop-pymt-service", url = "${eshop.pymt.service.url}")
+@FeignClient(name = "eshop-pymt-svc", url = "${eshop.pymt.service.url}")
 public interface OrderClient {
     @GetMapping("/orders/{userId}")
     List<Order> getOrdersByUserId(@PathVariable("userId") String userId);
