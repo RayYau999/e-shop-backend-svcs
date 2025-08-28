@@ -2,9 +2,7 @@ package com.rayyau.eshop.security.library.security;
 
 import io.jsonwebtoken.security.Keys;
 import lombok.AllArgsConstructor;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;

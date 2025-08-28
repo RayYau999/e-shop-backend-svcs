@@ -2,8 +2,8 @@ package com.rayyau.eshop.login.controller;
 
 import com.rayyau.eshop.login.dto.LoginRequest;
 import com.rayyau.eshop.login.dto.LoginResponse;
-import com.rayyau.eshop.login.security.JwtUtil;
-import com.rayyau.eshop.login.security.SecurityConfigProperties;
+import com.rayyau.eshop.security.library.security.JwtUtil;
+import com.rayyau.eshop.security.library.security.SecurityConfigProperties;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +40,7 @@ public class LoginController {
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/login")
     public LoginResponse login(@RequestBody @Valid LoginRequest request) {
+        log.info("calling login api");
         UsernamePasswordAuthenticationToken authToken = UsernamePasswordAuthenticationToken.unauthenticated(request.getUsername(), request.getPassword());
         Authentication authentication = authenticationManager.authenticate(authToken);
 
@@ -60,4 +61,5 @@ public class LoginController {
         log.info("login service is up and running");
         return "Login service is up and running!";
     }
+
 }

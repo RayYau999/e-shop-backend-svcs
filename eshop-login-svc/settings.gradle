@@ -1,7 +1,4 @@
 rootProject.name = 'eshop-login-svc'
 
-def localDev = true
-if(localDev == true) {
-    includeBuild('../eshop-pymt-svc')
-    includeBuild('../security-library')
-}
+includeBuild('../eshop-pymt-svc')
+includeBuild('../security-library')
