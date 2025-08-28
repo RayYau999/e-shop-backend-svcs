@@ -1,6 +1,5 @@
 package com.rayyau.eshop.pymt.repository;
 
-import com.rayyau.eshop.pymt.dto.Order;
 import com.rayyau.eshop.pymt.dto.OrderEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

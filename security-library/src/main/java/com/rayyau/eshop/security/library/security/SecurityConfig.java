@@ -2,8 +2,12 @@ package com.rayyau.eshop.security.library.security;
 
 import io.jsonwebtoken.security.Keys;
 import lombok.AllArgsConstructor;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -17,12 +21,15 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 import javax.crypto.SecretKey;
 
-@Configuration
+@AutoConfiguration
 @EnableWebSecurity
 @AllArgsConstructor
+@ConditionalOnClass(name = "org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder")
+@EnableJpaRepositories(basePackages = "com.rayyau.eshop.security.library.repository")
+@EntityScan(basePackages = "com.rayyau.eshop.security.library.dto")
+@ComponentScan(basePackages = {"com.rayyau.eshop.security.library"})
 public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private final SecurityConfigProperties configProperties;
