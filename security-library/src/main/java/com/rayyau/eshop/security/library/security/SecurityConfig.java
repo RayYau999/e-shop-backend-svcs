@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -26,10 +28,11 @@ import javax.crypto.SecretKey;
 @AutoConfiguration
 @EnableWebSecurity
 @AllArgsConstructor
-@ConditionalOnClass(name = "org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder")
-@EnableJpaRepositories(basePackages = "com.rayyau.eshop.security.library.repository")
-@EntityScan(basePackages = "com.rayyau.eshop.security.library.dto")
-@ComponentScan(basePackages = {"com.rayyau.eshop.security.library"})
+@ConditionalOnClass(name = "org.springframework.security.authentication.AuthenticationManager")
+@EnableConfigurationProperties(SecurityConfigProperties.class)
+//@EnableJpaRepositories(basePackages = "com.rayyau.eshop.security.library.repository")
+//@EntityScan(basePackages = "com.rayyau.eshop.security.library.dto")
+//@ComponentScan(basePackages = {"com.rayyau.eshop.security.library"})
 public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private final SecurityConfigProperties configProperties;

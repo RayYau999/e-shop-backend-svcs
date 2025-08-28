@@ -1,4 +1,3 @@
 rootProject.name = 'eshop-login-svc'
 
-includeBuild('../eshop-pymt-svc')
-includeBuild('../security-library')
+//includeBuild('../security-library')

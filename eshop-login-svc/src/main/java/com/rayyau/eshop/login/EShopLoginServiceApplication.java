@@ -12,9 +12,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EnableFeignClients
-//@ComponentScan(basePackages = {"com.rayyau.eshop.security.library", "com.rayyau.eshop"})
-//@EnableJpaRepositories(basePackages = "com.rayyau.eshop.security.library.repository")
-//@EntityScan(basePackages = "com.rayyau.eshop.security.library.dto")
+@ComponentScan(basePackages = {"com.rayyau.eshop.security.library", "com.rayyau.eshop.login"})
+@EnableJpaRepositories(basePackages = "com.rayyau.eshop.security.library.repository")
+@EntityScan(basePackages = "com.rayyau.eshop.security.library.dto")
 public class EShopLoginServiceApplication {
 
 	public static void main(String[] args) {
