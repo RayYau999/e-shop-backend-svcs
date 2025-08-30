@@ -35,6 +35,3 @@ out/
 
 ### VS Code ###
 .vscode/
-
-# Ignore MCD_Sandbox_eshop-rayyau_API_Keys directories and files
-MCD_Sandbox_eshop-rayyau_API_Keys/
