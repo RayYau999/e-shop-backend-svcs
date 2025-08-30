@@ -21,6 +21,9 @@ public class OrderEntity {
     private Long id;
 
     @Column(nullable = false)
+    private Long orderId;
+
+    @Column(nullable = false)
     private Long userId;
 
     @Column(nullable = false)
