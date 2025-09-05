@@ -1,17 +1,16 @@
-package com.rayyau.eshop.security.library.security;
+package com.rayyau.eshop.pymt.security;
 
+import com.rayyau.eshop.security.library.security.JwtAuthFilter;
+import com.rayyau.eshop.security.library.security.JwtUtil;
+import com.rayyau.eshop.security.library.security.SecurityConfig;
+import com.rayyau.eshop.security.library.security.SecurityConfigProperties;
 import io.jsonwebtoken.security.Keys;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -33,20 +32,16 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import javax.crypto.SecretKey;
 import java.util.List;
 
-@AutoConfiguration
+@Configuration
 @EnableWebSecurity
 @AllArgsConstructor
-@ConditionalOnClass(name = "org.springframework.security.authentication.AuthenticationManager")
-@ConditionalOnMissingBean(type = "com.rayyau.eshop.pymt.security.PymtSecurityConfig")
 @EnableConfigurationProperties(SecurityConfigProperties.class)
 @Slf4j
-//@EnableJpaRepositories(basePackages = "com.rayyau.eshop.security.library.repository")
-//@EntityScan(basePackages = "com.rayyau.eshop.security.library.dto")
-//@ComponentScan(basePackages = {"com.rayyau.eshop.security.library"})
-public class SecurityConfig {
+public class PymtSecurityConfig {
+
     private final UserDetailsService userDetailsService;
     private final SecurityConfigProperties configProperties;
-    private static final String ALL_PATH = "/**";
+    private static final String PAYPAL_STATUS_PATH = "/webhook/paypal/status/**";
 
     @Bean
     public JwtUtil jwtUtil() {
@@ -71,13 +66,13 @@ public class SecurityConfig {
 
         // Fallback (deny by not registering broader pattern)
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration(ALL_PATH, cfgRestricted);
+        source.registerCorsConfiguration(PAYPAL_STATUS_PATH, cfgRestricted);
         return source;
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter) throws Exception {
-        log.info("init common filter chain");
+        log.info("init pymt filter chain");
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
@@ -86,6 +81,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         configurer -> configurer
                                 .requestMatchers("/login").permitAll()
+                                .requestMatchers("/webhook/paypal").permitAll()
+                                .requestMatchers("/webhook/paypal/status/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
@@ -101,4 +98,5 @@ public class SecurityConfig {
         provider.setUserDetailsService(userDetailsService);
         return provider;
     }
+
 }

@@ -49,9 +49,9 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-	implementation 'com.rayyau.eshop:eshop-pymt-svc:0.0.1-SNAPSHOT'
+//	implementation 'com.rayyau.eshop:eshop-pymt-svc:0.0.1-SNAPSHOT'
 //	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-	implementation 'com.rayyau.eshop:eshop-security-library:0.0.1-SNAPSHOT'
+    implementation 'com.rayyau.eshop:security-library:0.0.1-SNAPSHOT'
 }
 
 tasks.named('test') {
