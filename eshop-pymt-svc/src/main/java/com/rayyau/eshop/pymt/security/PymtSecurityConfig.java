@@ -42,6 +42,7 @@ public class PymtSecurityConfig {
     private final UserDetailsService userDetailsService;
     private final SecurityConfigProperties configProperties;
     private static final String PAYPAL_STATUS_PATH = "/webhook/paypal/status/**";
+    private static final String ALL_PATH = "/**";
 
     @Bean
     public JwtUtil jwtUtil() {
@@ -54,7 +55,7 @@ public class PymtSecurityConfig {
         return configuration.getAuthenticationManager();
     }
 
-    // CORS for only localhost:3000 and only the webhook status path
+    // CORS for only localhost:3000 for all path
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration cfgRestricted = new CorsConfiguration();
@@ -66,7 +67,7 @@ public class PymtSecurityConfig {
 
         // Fallback (deny by not registering broader pattern)
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration(PAYPAL_STATUS_PATH, cfgRestricted);
+        source.registerCorsConfiguration(ALL_PATH, cfgRestricted);
         return source;
     }
 
