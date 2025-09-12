@@ -1,4 +1,21 @@
 --these script are for demo purposes only, run once to create sample data in the DB
+-----------start: This line of code just to prevent error when starting the application-----------------
+select * from users;
+-----------end of lines-------------------
+
+-----------start: run once to create the table you need in the docker mysql db-----------------
+
+-- CREATE TABLE orders (
+--                         id BIGINT PRIMARY KEY AUTO_INCREMENT,
+--                         user_id BIGINT NOT NULL,
+--                         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+-- );
+
+
+
+----------end of lines-------------------
+
+-----------start: run below query to renew the data to the initial state that require to run the application-----------------
 
 -- truncate table `users`;
 --
@@ -10,9 +27,11 @@
 --
 -- TRUNCATE TABLE `orders`;
 --
--- INSERT INTO `orders` (`id`, `user_id`, `product_id`, `quantity`, `price`, `status`, `created_at`, `order_id`)
--- VALUES (1, 1, 102, 2, 20.98, 'CREATED', CURRENT_DATE, 1001);
+-- INSERT INTO orders (id, user_id, total_price, created_at)
+-- VALUES (1, 1, 20.00, CURRENT_TIMESTAMP);
 --
--- ALTER TABLE `orders` AUTO_INCREMENT = 3;
+-- ALTER TABLE `orders` AUTO_INCREMENT = 2;
 --
 -- SET FOREIGN_KEY_CHECKS = 1;
+
+-----------end of lines-----------------

@@ -1,4 +1,4 @@
-package com.rayyau.eshop.pymt.dto;
+package com.rayyau.eshop.pymt.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,6 +8,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -15,33 +18,21 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "orders")
 @AllArgsConstructor
+@Setter
+@NoArgsConstructor
 public class OrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private Long orderId;
-
-    @Column(nullable = false)
     private Long userId;
 
     @Column(nullable = false)
-    private String productId;
+    private Double totalPrice;
 
     @Column(nullable = false)
-    private Integer quantity;
-
-    @Column(nullable = false)
-    private Double price;
-
-    @Column(nullable = false, length = 20)
-    private String status;
-
-    @Column(nullable = false)
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
-    public OrderEntity() {
-
-    }
 }
