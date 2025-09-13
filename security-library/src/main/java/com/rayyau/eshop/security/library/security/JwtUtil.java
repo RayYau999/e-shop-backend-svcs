@@ -28,10 +28,6 @@ public class JwtUtil {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public Long extractUserId(String token) throws JwtException {
-        return Long.parseLong(extractClaim(token, Claims::getId));
-    }
-
     public Date extractExpirationDate(String token) throws JwtException {
         return extractClaim(token, Claims::getExpiration);
     }
