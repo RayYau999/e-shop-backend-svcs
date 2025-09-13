@@ -17,7 +17,6 @@ public class WebConfig implements WebMvcConfigurer {
     private final UserRepository userRepository;
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-//        resolvers.add(new UserIdResolver(jwtUtil, userRepository));
         resolvers.add(new UserIdResolver(jwtUtil, userRepository));
     }
 }

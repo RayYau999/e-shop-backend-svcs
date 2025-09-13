@@ -6,6 +6,8 @@ import com.rayyau.eshop.pymt.dto.OrderDto;
 import com.rayyau.eshop.pymt.service.OrderService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +31,9 @@ public class OrderController {
     @GetMapping("/orders/testing")
     String testing() {
         log.info("you can access this without login");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        log.info("get username from security context: {}", username);
         // Dummy implementation for demonstration purposes
         return "you can access this without login";
     }
