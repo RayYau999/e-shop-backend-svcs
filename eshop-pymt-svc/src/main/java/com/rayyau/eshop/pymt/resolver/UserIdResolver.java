@@ -6,6 +6,7 @@ import com.rayyau.eshop.security.library.repository.UserRepository;
 import com.rayyau.eshop.security.library.security.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -24,8 +25,8 @@ public class UserIdResolver implements HandlerMethodArgumentResolver {
     }
 
     @Override
-    public Long resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
-            NativeWebRequest webRequest, org.springframework.web.bind.support.WebDataBinderFactory binderFactory) {
+    public Long resolveArgument(@NonNull MethodParameter parameter, ModelAndViewContainer mavContainer,
+            @NonNull NativeWebRequest webRequest, org.springframework.web.bind.support.WebDataBinderFactory binderFactory) {
         HttpServletRequest request = ((ServletWebRequest) webRequest).getRequest();
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
