@@ -11,7 +11,15 @@ select * from users;
 --                         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 -- );
 
-
+CREATE TABLE shipments (
+                           id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                           product_id BIGINT NOT NULL,
+                           price DOUBLE NOT NULL,
+                           quantity BIGINT NOT NULL,
+                           status VARCHAR(255) NOT NULL,
+                           order_id BIGINT NOT NULL,
+                           CONSTRAINT fk_order FOREIGN KEY (order_id) REFERENCES orders(id)
+);
 
 ----------end of lines-------------------
 
@@ -31,6 +39,15 @@ select * from users;
 -- VALUES (1, 1, 20.00, CURRENT_TIMESTAMP);
 --
 -- ALTER TABLE `orders` AUTO_INCREMENT = 2;
+--
+-- SET FOREIGN_KEY_CHECKS = 1;
+
+-- SET FOREIGN_KEY_CHECKS = 0;
+--
+-- TRUNCATE TABLE `shipments`;
+--
+-- INSERT INTO shipments (product_id, price, quantity, status, order_id)
+-- VALUES (1001, 50.0, 2, 'PENDING', 1);
 --
 -- SET FOREIGN_KEY_CHECKS = 1;
 
