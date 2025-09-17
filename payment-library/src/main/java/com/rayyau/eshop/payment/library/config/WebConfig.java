@@ -1,6 +1,6 @@
-package com.rayyau.eshop.pymt.config;
+package com.rayyau.eshop.payment.library.config;
 
-import com.rayyau.eshop.pymt.resolver.UserIdResolver;
+import com.rayyau.eshop.payment.library.resolver.UserIdResolver;
 import com.rayyau.eshop.security.library.repository.UserRepository;
 import com.rayyau.eshop.security.library.security.JwtUtil;
 import lombok.AllArgsConstructor;

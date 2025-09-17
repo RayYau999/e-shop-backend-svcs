@@ -1,6 +1,7 @@
-package com.rayyau.eshop.pymt.resolver;
+package com.rayyau.eshop.payment.library.resolver;
 
-import com.rayyau.eshop.pymt.annotation.UserId;
+
+import com.rayyau.eshop.payment.library.annotation.UserId;
 import com.rayyau.eshop.security.library.dto.UserEntity;
 import com.rayyau.eshop.security.library.repository.UserRepository;
 import com.rayyau.eshop.security.library.security.JwtUtil;

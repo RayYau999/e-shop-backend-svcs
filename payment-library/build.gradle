@@ -1,0 +1,83 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.5.5'
+	id 'io.spring.dependency-management' version '1.1.7'
+    id 'maven-publish' // Add this line
+}
+
+group = 'com.rayyau.eshop'
+version = '0.0.1-SNAPSHOT'
+description = 'Payment library for other services'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+repositories {
+	mavenCentral()
+    mavenLocal()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:2024.0.0"
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+//    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    //openfeign for microservice communication
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+    implementation 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+    testImplementation 'org.projectlombok:lombok:1.18.30'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.2.0'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.12.5'
+
+    //add security library dependency
+    implementation 'com.rayyau.eshop:eshop-security-library:0.0.1-SNAPSHOT'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+// Add these lines to publish the library to a local Maven repository
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = 'com.rayyau.eshop'
+            artifactId = 'eshop-security-library'
+            version = '0.0.1-SNAPSHOT'
+
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            url = uri("$System.env.HOME/.m2/repository") // Local repository directory
+        }
+    }
+}
+
+tasks.register('publishToLocalMaven') {
+    dependsOn publish
+}
+
+jar {
+    archiveBaseName = 'eshop-payment-library'
+    archiveClassifier = ''  // Ensure no classifier is added
+    archiveVersion = '0.0.1-SNAPSHOT'
+}

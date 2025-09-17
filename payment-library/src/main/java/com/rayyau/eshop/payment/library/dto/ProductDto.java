@@ -1,4 +1,4 @@
-package com.rayyau.eshop.pymt.dto;
+package com.rayyau.eshop.payment.library.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -9,9 +9,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EnableFeignClients
-@ComponentScan(basePackages = {"com.rayyau.eshop.security.library", "com.rayyau.eshop.pymt", "com.rayyau.eshop.pymt.config"})
+@ComponentScan(basePackages = {"com.rayyau.eshop.security.library", "com.rayyau.eshop.pymt", "com.rayyau.eshop.payment.library"})
 @EnableJpaRepositories(basePackages = {"com.rayyau.eshop.security.library.repository", "com.rayyau.eshop.pymt.repository"})
-@EntityScan(basePackages = {"com.rayyau.eshop.security.library.dto", "com.rayyau.eshop.pymt.entity"})
+@EntityScan(basePackages = {"com.rayyau.eshop.security.library.dto", "com.rayyau.eshop.pymt.entity", "com.rayyau.eshop.payment.library.dto"})
 public class EshopPymtServiceApplication {
 
 	public static void main(String[] args) {

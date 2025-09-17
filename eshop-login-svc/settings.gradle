@@ -1,3 +1,4 @@
 rootProject.name = 'eshop-login-svc'
 
 includeBuild('../security-library')
+includeBuild('../payment-library')

@@ -1,15 +1,14 @@
 package com.rayyau.eshop.pymt.service;
 
+import com.rayyau.eshop.payment.library.dto.OrderDto;
+import com.rayyau.eshop.payment.library.dto.ProductDto;
 import com.rayyau.eshop.pymt.dto.Order;
-import com.rayyau.eshop.pymt.dto.OrderDto;
 import com.rayyau.eshop.pymt.entity.OrderEntity;
-import com.rayyau.eshop.pymt.dto.ProductDto;
 import com.rayyau.eshop.pymt.entity.ShipmentEntity;
 import com.rayyau.eshop.pymt.enumeration.ShipmentStatus;
 import com.rayyau.eshop.pymt.mapper.OrderMapper;
 import com.rayyau.eshop.pymt.repository.OrderRepository;
 import com.rayyau.eshop.pymt.repository.ShipmentRepository;
-import com.rayyau.eshop.security.library.dto.UserEntity;
 import com.rayyau.eshop.security.library.repository.UserRepository;
 import com.rayyau.eshop.security.library.security.JwtUtil;
 import jakarta.transaction.Transactional;
@@ -43,11 +42,6 @@ public class OrderService {
     @Transactional
     public void saveOrder(OrderDto orderDto, Long userId) {
         log.info("UserId extracted in add-orders: {}", userId);
-
-//        OrderEntity orderEntity = orderMapper.orderDtoToOrderEntity(orderDto);
-
-//        orderEntity.setUserId(1L);
-//        orderRepository.save(orderEntity);
 
         OrderEntity orderEntity = orderMapper.orderDtoToOrderEntity(orderDto);
         orderEntity.setUserId(userId);

@@ -49,6 +49,9 @@ dependencies {
 	implementation 'com.rayyau.eshop:security-library:0.0.1-SNAPSHOT'
 	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+
+    //this is the correct one to use the payment library, need to change other, others are just using local build (includeBuild in settings.gradle)
+    implementation 'com.rayyau.eshop:payment-library:0.0.1-SNAPSHOT'
 }
 
 tasks.named('test') {

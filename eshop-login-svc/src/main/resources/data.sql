@@ -11,15 +11,15 @@ select * from users;
 --                         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 -- );
 
-CREATE TABLE shipments (
-                           id BIGINT PRIMARY KEY AUTO_INCREMENT,
-                           product_id BIGINT NOT NULL,
-                           price DOUBLE NOT NULL,
-                           quantity BIGINT NOT NULL,
-                           status VARCHAR(255) NOT NULL,
-                           order_id BIGINT NOT NULL,
-                           CONSTRAINT fk_order FOREIGN KEY (order_id) REFERENCES orders(id)
-);
+-- CREATE TABLE shipments (
+--                            id BIGINT PRIMARY KEY AUTO_INCREMENT,
+--                            product_id BIGINT NOT NULL,
+--                            price DOUBLE NOT NULL,
+--                            quantity BIGINT NOT NULL,
+--                            status VARCHAR(255) NOT NULL,
+--                            order_id BIGINT NOT NULL,
+--                            CONSTRAINT fk_order FOREIGN KEY (order_id) REFERENCES orders(id)
+-- );
 
 ----------end of lines-------------------
 

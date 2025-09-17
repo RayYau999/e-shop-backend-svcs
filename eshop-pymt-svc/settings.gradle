@@ -1,3 +1,4 @@
 rootProject.name = 'eshop-pymt-svc'
 
 includeBuild('../security-library')
+includeBuild('../payment-library')
