@@ -1,0 +1,4 @@
+rootProject.name = 'eshop-api-gateway'
+
+includeBuild('../security-library')
+includeBuild('../payment-library')

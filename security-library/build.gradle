@@ -56,7 +56,7 @@ publishing {
 	publications {
 		mavenJava(MavenPublication) {
 			groupId = 'com.rayyau.eshop'
-			artifactId = 'eshop-security-library'
+			artifactId = 'security-library-prod'
 			version = '0.0.1-SNAPSHOT'
 
 			from components.java
@@ -73,6 +73,7 @@ tasks.register('publishToLocalMaven') {
 	dependsOn publish
 }
 
+// this one only for building jar with the name set below in own module project folder
 jar {
 	archiveBaseName = 'eshop-security-library'
 	archiveClassifier = ''  // Ensure no classifier is added

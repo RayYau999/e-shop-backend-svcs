@@ -1,4 +1,4 @@
-package com.rayyau.eshop.login.dto;
+package com.rayyau.eshop.security.library.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
