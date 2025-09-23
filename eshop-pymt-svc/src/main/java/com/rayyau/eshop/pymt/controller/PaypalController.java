@@ -1,5 +1,10 @@
 package com.rayyau.eshop.pymt.controller;
 
+import com.rayyau.eshop.payment.library.annotation.UserId;
+import com.rayyau.eshop.payment.library.dto.OrderDto;
+import com.rayyau.eshop.pymt.service.OrderService;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -9,9 +14,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
+@Slf4j
+@AllArgsConstructor
 public class PaypalController {
-
-    private static final Logger log = LoggerFactory.getLogger(PaypalController.class);
+    private final OrderService orderService;
 
     // In-memory store (replace with persistent storage in production)
     private final Map<String, PaymentRecord> paymentStatuses = new ConcurrentHashMap<>();
@@ -47,7 +53,7 @@ public class PaypalController {
             log.info("No record found for payment ID: {}", paymentId);
             return ResponseEntity.notFound().build();
         }
-//        return rec != null ? ResponseEntity.ok(rec) : ResponseEntity.notFound().build();
+        //        return rec != null ? ResponseEntity.ok(rec) : ResponseEntity.notFound().build();
     }
 
     // DTOs (records require Java 16+; convert to classes if using older Java)

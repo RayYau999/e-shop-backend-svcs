@@ -83,7 +83,7 @@ public class PymtSecurityConfig {
                         configurer -> configurer
                                 .requestMatchers("/login").permitAll()
                                 .requestMatchers("/webhook/paypal").permitAll()
-                                .requestMatchers("/webhook/paypal/status/**").permitAll()
+//                                .requestMatchers("/webhook/paypal/status/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())

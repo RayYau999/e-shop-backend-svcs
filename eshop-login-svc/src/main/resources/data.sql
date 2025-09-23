@@ -8,7 +8,9 @@ select * from users;
 -- CREATE TABLE orders (
 --                         id BIGINT PRIMARY KEY AUTO_INCREMENT,
 --                         user_id BIGINT NOT NULL,
---                         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+--                         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+--                         total_price DOUBLE NOT NULL,
+--                         status ENUM('PENDING', 'CONFIRMED') NOT NULL
 -- );
 
 -- CREATE TABLE shipments (
