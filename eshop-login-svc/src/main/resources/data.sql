@@ -53,4 +53,13 @@ select * from users;
 --
 -- SET FOREIGN_KEY_CHECKS = 1;
 
+-- CREATE TABLE payment_status (
+--                                 id BIGINT PRIMARY KEY AUTO_INCREMENT,
+--                                 payment_id VARCHAR(100) NOT NULL UNIQUE,
+--                                 status VARCHAR(50) NOT NULL,
+--                                 details TEXT,
+--                                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--                                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+-- );
+
 -----------end of lines-----------------

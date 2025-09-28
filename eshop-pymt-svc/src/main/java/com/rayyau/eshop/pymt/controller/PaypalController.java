@@ -2,7 +2,9 @@ package com.rayyau.eshop.pymt.controller;
 
 import com.rayyau.eshop.payment.library.annotation.UserId;
 import com.rayyau.eshop.payment.library.dto.OrderDto;
+import com.rayyau.eshop.pymt.dto.PaymentStatusDto;
 import com.rayyau.eshop.pymt.service.OrderService;
+import com.rayyau.eshop.pymt.service.PaymentService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -18,6 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @AllArgsConstructor
 public class PaypalController {
     private final OrderService orderService;
+    private final PaymentService paymentService;
 
     // In-memory store (replace with persistent storage in production)
     private final Map<String, PaymentRecord> paymentStatuses = new ConcurrentHashMap<>();
@@ -59,4 +62,16 @@ public class PaypalController {
     // DTOs (records require Java 16+; convert to classes if using older Java)
     public record PaypalWebhookEvent(String event_type, Map<String, Object> resource) {}
     public record PaymentRecord(String status, Map<String, Object> details) {}
+
+    @PostMapping("/insert-payment-status")
+    public ResponseEntity<String> insertPaymentStatus(@RequestBody PaymentStatusDto paymentStatusDto) {
+        log.info("Inserting payment status: {}", paymentStatusDto);
+        try {
+            paymentService.savePaymentStatus(paymentStatusDto);
+            return ResponseEntity.ok("Payment status inserted.");
+        } catch (Exception e) {
+            log.error("Error inserting payment status: {}", e.getMessage());
+            return ResponseEntity.status(500).body("Error inserting payment status: " + e.getMessage());
+        }
+    }
 }
