@@ -3,6 +3,9 @@ package com.rayyau.eshop.pymt.controller;
 import com.rayyau.eshop.payment.library.annotation.UserId;
 import com.rayyau.eshop.payment.library.dto.OrderDto;
 import com.rayyau.eshop.pymt.dto.PaymentStatusDto;
+import com.rayyau.eshop.pymt.entity.PaymentStatusEntity;
+import com.rayyau.eshop.pymt.enumeration.PaymentStatus;
+import com.rayyau.eshop.pymt.repository.PaymentStatusRepository;
 import com.rayyau.eshop.pymt.service.OrderService;
 import com.rayyau.eshop.pymt.service.PaymentService;
 import lombok.AllArgsConstructor;
@@ -13,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
@@ -24,6 +28,7 @@ public class PaypalController {
 
     // In-memory store (replace with persistent storage in production)
     private final Map<String, PaymentRecord> paymentStatuses = new ConcurrentHashMap<>();
+    private final PaymentStatusRepository paymentStatusRepository;
 
     // PayPal webhook endpoint
     @PostMapping("/webhook/paypal")
@@ -36,7 +41,24 @@ public class PaypalController {
             String paymentId = idObj != null ? idObj.toString() : "UNKNOWN";
             log.info("Webhook received: Payment Captured Successfully. ID: {}", paymentId);
 
-            paymentStatuses.put(paymentId, new PaymentRecord("COMPLETED", resource));
+            Double amount = null;
+            String currency = null;
+            Object amountObj = resource.get("amount");
+            if (amountObj instanceof Map<?, ?> amountMap) {
+                Object valueObj = amountMap.get("value");
+                currency = amountMap.get("currency_code") != null ? amountMap.get("currency_code").toString() : null;
+                if (valueObj != null) {
+                    amount = Double.parseDouble(valueObj.toString());
+                }
+            }
+            //            paymentStatuses.put(paymentId, new PaymentRecord("COMPLETED", resource));
+            PaymentStatusDto paymentStatusDto = PaymentStatusDto.builder()
+                    .paymentId(paymentId)
+                    .status(PaymentStatus.COMPLETED)
+                    .amount(amount)
+                    .currency(currency)
+                    .build();
+            paymentService.savePaymentStatus(paymentStatusDto);
             return ResponseEntity.ok("Payment recorded.");
         }
 
@@ -46,12 +68,13 @@ public class PaypalController {
 
     // Optional: retrieve stored payment status
     @GetMapping("/webhook/paypal/status/{paymentId}")
-    public ResponseEntity<PaymentRecord> getStatus(@PathVariable String paymentId) {
+    public ResponseEntity<PaymentStatusEntity> getStatus(@PathVariable String paymentId) {
         log.info("Retrieving status for payment ID2: {}", paymentId);
-        PaymentRecord rec = paymentStatuses.get(paymentId);
-        if(rec != null) {
+        //        PaymentRecord rec = paymentStatuses.get(paymentId);
+        Optional<PaymentStatusEntity> rec = paymentStatusRepository.findByPaymentId(paymentId);
+        if(rec.isPresent()) {
             log.info("Found payment record: {}", rec);
-            return ResponseEntity.ok(rec);
+            return ResponseEntity.ok(rec.get());
         } else {
             log.info("No record found for payment ID: {}", paymentId);
             return ResponseEntity.notFound().build();

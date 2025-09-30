@@ -29,6 +29,8 @@ public class PaymentStatusEntity {
     @Enumerated(EnumType.STRING)
     private PaymentStatus status;
 
-    private String details; // JSON or string representation of payment details
+    private Double amount;
+
+    private String currency;
 
 }

@@ -57,7 +57,8 @@ select * from users;
 --                                 id BIGINT PRIMARY KEY AUTO_INCREMENT,
 --                                 payment_id VARCHAR(100) NOT NULL UNIQUE,
 --                                 status VARCHAR(50) NOT NULL,
---                                 details TEXT,
+--                                 amount DOUBLE NOT NULL,
+--                                 currency VARCHAR(20) NOT NULL,
 --                                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 --                                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 -- );
