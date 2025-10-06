@@ -2,6 +2,7 @@ package com.rayyau.eshop.pymt.controller;
 
 import com.rayyau.eshop.payment.library.annotation.UserId;
 import com.rayyau.eshop.payment.library.dto.OrderDto;
+import com.rayyau.eshop.pymt.dto.PaymentEvent;
 import com.rayyau.eshop.pymt.dto.PaymentStatusDto;
 import com.rayyau.eshop.pymt.entity.PaymentStatusEntity;
 import com.rayyau.eshop.pymt.enumeration.PaymentStatus;
@@ -17,7 +18,23 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.Arrays;
+import java.util.Properties;
+import org.apache.kafka.streams.StreamsConfig;
+import org.apache.kafka.streams.StreamsBuilder;
+import org.apache.kafka.streams.KafkaStreams;
+import org.apache.kafka.streams.StreamsBuilder;
+import org.apache.kafka.streams.StreamsConfig;
+import org.apache.kafka.streams.kstream.KStream;
+import org.apache.kafka.streams.kstream.KTable;
+import org.apache.kafka.streams.kstream.Materialized;
+import org.apache.kafka.streams.kstream.Produced;
+import org.apache.kafka.streams.state.KeyValueStore;
+import org.apache.kafka.common.serialization.Serdes;
+import org.apache.kafka.common.utils.Bytes;
+import java.util.UUID;
 
 @RestController
 @Slf4j
@@ -95,6 +112,17 @@ public class PaypalController {
         } catch (Exception e) {
             log.error("Error inserting payment status: {}", e.getMessage());
             return ResponseEntity.status(500).body("Error inserting payment status: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("kafka-test")
+    public ResponseEntity<String> testKafka(PaymentEvent event) {
+        try {
+            paymentService.handlePaymentSuccess(event);
+            return ResponseEntity.ok("success");
+        } catch (Exception e) {
+            log.error("Error handling payment success: {}", e.getMessage());
+            return ResponseEntity.status(500).body("Error: " + e.getMessage());
         }
     }
 }

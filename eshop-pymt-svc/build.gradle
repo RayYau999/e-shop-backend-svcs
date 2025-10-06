@@ -56,6 +56,10 @@ dependencies {
 
     //this is the correct one to use the payment library, need to change other, others are just using local build (includeBuild in settings.gradle)
     implementation "com.rayyau.eshop:payment-library${devName}:0.0.1-SNAPSHOT"
+
+    //kafka
+    implementation 'org.apache.kafka:kafka-streams:3.7.0'
+    implementation 'org.springframework.kafka:spring-kafka'
 }
 
 tasks.named('test') {
