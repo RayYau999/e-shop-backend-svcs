@@ -115,8 +115,8 @@ public class PaypalController {
         }
     }
 
-    @GetMapping("kafka-test")
-    public ResponseEntity<String> testKafka(PaymentEvent event) {
+    @PostMapping("kafka-test")
+    public ResponseEntity<String> testKafka(@RequestBody PaymentEvent event) {
         try {
             paymentService.handlePaymentSuccess(event);
             return ResponseEntity.ok("success");

@@ -21,3 +21,23 @@ $ docker run --name mysql \
 
 ### To publish to maven local
 ```./gradlew publishToMavenLocal```
+
+## Kafka commands
+### Mainly base on document from https://kafka.apache.org/quickstart
+1. ```KAFKA_CLUSTER_ID="$(bin/kafka-storage.sh random-uuid)" ```
+2. ```bin/kafka-storage.sh format --standalone -t $KAFKA_CLUSTER_ID -c config/server.properties```
+3. ```bin/kafka-server-start.sh config/server.properties```
+4. What I do is install docker image by ```docker pull apache/kafka:4.1.0```
+5. Start the docker container by ```docker run -p 9092:9092 apache/kafka:4.1.0```
+
+### Kafka - for my own project
+1. I added a topic named payment-events by running the api builded in 
+
+2. you can read the topic by running the following command
+``bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 \
+--topic payment-events \
+--from-beginning \
+--property print.key=true \
+--property print.value=true \
+--property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer \
+--property value.deserializer=org.apache.kafka.common.serialization.StringDeserializer``
