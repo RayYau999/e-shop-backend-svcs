@@ -24,11 +24,19 @@ $ docker run --name mysql \
 
 ## Kafka commands
 ### Mainly base on document from https://kafka.apache.org/quickstart
+#### Kafka - start a kafka server in local (need java 17+)
 1. ```KAFKA_CLUSTER_ID="$(bin/kafka-storage.sh random-uuid)" ```
 2. ```bin/kafka-storage.sh format --standalone -t $KAFKA_CLUSTER_ID -c config/server.properties```
-3. ```bin/kafka-server-start.sh config/server.properties```
-4. What I do is install docker image by ```docker pull apache/kafka:4.1.0```
-5. Start the docker container by ```docker run -p 9092:9092 apache/kafka:4.1.0```
+3. ```bin/kafka-server-start.sh config/server.properties```, 
+after you run step 1 and 2 once, you don't need to run them again. or else you might need to delete the kafka log folder. ```rm -rf /tmp/kraft-combined-logs/*```
+
+#### Kafka - start a kafka server in docker (need java 17+)
+1. What I do is install docker image by ```docker pull apache/kafka:4.1.0```
+2. Start the docker container by ```docker run -p 9092:9092 apache/kafka:4.1.0```
+#### Remark:
+1. You need to run the kafka cli command in the kafka directory if you run in local.
+2. This is for myself, where I put my kafka in 
+```cd Developer/kafka_2.13-4.1.0```
 
 ### Kafka - for my own project
 1. I added a topic named payment-events by running the api builded in 

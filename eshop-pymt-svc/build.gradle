@@ -54,12 +54,15 @@ dependencies {
 	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 
-    //this is the correct one to use the payment library, need to change other, others are just using local build (includeBuild in settings.gradle)
+    //TODO: this is the correct one to use the payment library, need to change other, others are just using local build (includeBuild in settings.gradle)
     implementation "com.rayyau.eshop:payment-library${devName}:0.0.1-SNAPSHOT"
 
     //kafka
     implementation 'org.apache.kafka:kafka-streams:3.7.0'
     implementation 'org.springframework.kafka:spring-kafka'
+
+    //mail
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
 tasks.named('test') {

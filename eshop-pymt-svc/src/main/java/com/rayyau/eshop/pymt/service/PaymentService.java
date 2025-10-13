@@ -7,6 +7,7 @@ import com.rayyau.eshop.pymt.mapper.PaymentStatusMapper;
 import com.rayyau.eshop.pymt.repository.PaymentStatusRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.common.utils.Bytes;
 import org.springframework.stereotype.Service;
 import org.springframework.kafka.core.KafkaTemplate;
 
