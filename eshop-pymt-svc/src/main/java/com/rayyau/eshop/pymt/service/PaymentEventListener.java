@@ -17,9 +17,9 @@ public class PaymentEventListener {
 
     @KafkaListener(topics = "payment-events", groupId = "email-service")
     public void listen(PaymentEvent event) {
-        if ("SUCCESS".equals(event.getStatus())) {
-            log.info("add to email queue: Payment successful for orderId: {}, email: {}", event.getOrderId(), event.getEmail());
-            emailService.sendPaymentSuccessEmail(event.getEmail());
+        if ("COMPLETED".equals(event.getStatus())) {
+            log.info("add to email queue: Payment successful for paymentId: {}, email: {}", event.getPaymentId(), event.getEmail());
+            emailService.sendPaymentSuccessEmail(event);
         }
     }
 }

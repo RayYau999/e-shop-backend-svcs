@@ -9,10 +9,12 @@ import com.rayyau.eshop.pymt.enumeration.PaymentStatus;
 import com.rayyau.eshop.pymt.repository.PaymentStatusRepository;
 import com.rayyau.eshop.pymt.service.OrderService;
 import com.rayyau.eshop.pymt.service.PaymentService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -46,6 +48,9 @@ public class PaypalController {
     // In-memory store (replace with persistent storage in production)
     private final Map<String, PaymentRecord> paymentStatuses = new ConcurrentHashMap<>();
     private final PaymentStatusRepository paymentStatusRepository;
+
+//    @Value("${spring.client.mail}")
+//    private String mailClient;
 
     // PayPal webhook endpoint
     @PostMapping("/webhook/paypal")
@@ -125,4 +130,37 @@ public class PaypalController {
             return ResponseEntity.status(500).body("Error: " + e.getMessage());
         }
     }
+
+    @GetMapping("/after-payment/{paymentId}")
+    public ResponseEntity<String> afterPayment(@PathVariable String paymentId) {
+
+        try {
+            Optional<PaymentStatusEntity> rec = paymentStatusRepository.findByPaymentId(paymentId);
+            if(rec.isPresent()) {
+                log.info("afterPayment :: Found payment record: {}", rec);
+                PaymentStatusEntity paymentStatusEntity = rec.get();
+                if (paymentStatusEntity.getStatus().equals(PaymentStatus.COMPLETED)) {
+                    PaymentEvent paymentEvent = PaymentEvent.builder()
+                            .paymentId(paymentStatusEntity.getPaymentId())
+                            .status(paymentStatusEntity.getStatus().name())
+                            .email("example@gmail.com") //replace this with real client email, TODO: get from the user details in db
+                            .amount(paymentStatusEntity.getAmount())
+                            .currency(paymentStatusEntity.getCurrency())
+                            .build();
+                    //send email event to kafka
+                    paymentService.handlePaymentSuccess(paymentEvent);
+                    return ResponseEntity.ok("Payment after payment handling success");
+                }
+                log.info("afterPayment :: Found payment record but status is not completed: {}", rec);
+                return ResponseEntity.status(500).body("Found payment record but status is not completed");
+            } else {
+                log.info("No record found for payment ID: {}", paymentId);
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            log.error("Error inserting payment status: {}", e.getMessage());
+            return ResponseEntity.status(500).body("Error inserting payment status: " + e.getMessage());
+        }
+    }
+
 }

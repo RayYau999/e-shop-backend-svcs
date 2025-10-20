@@ -49,3 +49,8 @@ after you run step 1 and 2 once, you don't need to run them again. or else you m
 --property print.value=true \
 --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer \
 --property value.deserializer=org.apache.kafka.common.serialization.StringDeserializer``
+
+
+### Ngrok to expose pymt service to paypal webhook
+1. Download ngrok from https://ngrok.com/download
+2. run ```./ngrok http 8081``` to expose the local pymt-service port 8081 to internet
