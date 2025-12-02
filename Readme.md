@@ -54,3 +54,8 @@ after you run step 1 and 2 once, you don't need to run them again. or else you m
 ### Ngrok to expose pymt service to paypal webhook
 1. Download ngrok from https://ngrok.com/download
 2. run ```./ngrok http 8081``` to expose the local pymt-service port 8081 to internet
+
+### Build the image
+1. cd to the root directory (e.g. e-shop-backend-svcs) and run 
+```DOCKER_BUILDKIT=1 docker build --progress=plain -f eshop-api-gateway/Dockerfile -t eshop-api-gateway:latest .```
+2. It will use the eshop-api-gateway/Dockerfile to build the image from the root directory.

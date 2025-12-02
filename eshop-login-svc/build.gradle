@@ -25,10 +25,14 @@ dependencyManagement {
 }
 
 //def isDev = (System.getenv('env') == 'dev')
-def isDev = true
-def devName = (isDev) ? '' : '-prod'
+//def isDev = true
+//def devName = (isDev) ? '' : '-prod'
+
+project.ext.set('isDev', System.getenv('RAYYAU_ESHOP_ENV') == 'dev')
+project.ext.set('devName', project.ext.isDev ? '' : '-prod')
 
 dependencies {
+    var devName = project.ext.devName
 	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-security'

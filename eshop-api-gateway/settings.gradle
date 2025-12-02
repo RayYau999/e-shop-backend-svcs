@@ -1,4 +1,6 @@
 rootProject.name = 'eshop-api-gateway'
 
-includeBuild('../security-library')
-includeBuild('../payment-library')
+if (System.getenv('RAYYAU_ESHOP_ENV') == 'dev') {
+    includeBuild('../security-library')
+    includeBuild('../payment-library')
+}
