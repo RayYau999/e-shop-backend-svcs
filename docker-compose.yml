@@ -1,0 +1,66 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: eshop-api-gateway/Dockerfile
+    image: eshop-api-gateway:local
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://db:3306/demo_dev?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+      SPRING_DATASOURCE_USERNAME: devuser
+      SPRING_DATASOURCE_PASSWORD: devpassword
+      ESHOP_LOGIN_SERVICE_URL: http://login:8080
+      ESHOP_PYMT_SERVICE_URL: http://payment:8081
+    depends_on:
+      - db
+      - login
+      - payment
+
+  login:
+    build:
+      context: .
+      dockerfile: eshop-login-svc/Dockerfile
+    image: login-service:local
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://db:3306/demo_dev?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+      SPRING_DATASOURCE_USERNAME: devuser
+      SPRING_DATASOURCE_PASSWORD: devpassword
+      ESHOP_PYMT_SERVICE_URL: http://payment:8081
+    depends_on:
+      - db
+      - payment
+
+  payment:
+    build:
+      context: .
+      dockerfile: eshop-pymt-svc/Dockerfile
+    image: payment-service:local
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:mysql://db:3306/demo_dev?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+      SPRING_DATASOURCE_USERNAME: devuser
+      SPRING_DATASOURCE_PASSWORD: devpassword
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: demo_dev
+      MYSQL_USER: devuser
+      MYSQL_PASSWORD: devpassword
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./data.sql:/docker-entrypoint-initdb.d/data.sql:ro
+
+volumes:
+  db-data:

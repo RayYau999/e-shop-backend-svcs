@@ -59,3 +59,12 @@ after you run step 1 and 2 once, you don't need to run them again. or else you m
 1. cd to the root directory (e.g. e-shop-backend-svcs) and run 
 ```DOCKER_BUILDKIT=1 docker build --progress=plain -f eshop-api-gateway/Dockerfile -t eshop-api-gateway:latest .```
 2. It will use the eshop-api-gateway/Dockerfile to build the image from the root directory.
+
+### Build the container with docker compose
+1. docker compose (or docker-compose) reads a docker-compose.yml file that defines multiple services, 
+networks and volumes, then builds (if needed) and runs the containers together.
+
+### Note for dockerfile and docker compose
+1. Dockerfile is used to build a single image for a service.
+2. Docker Compose is used to define and run multi-container Docker applications.
+3. In this project, each microservice has its own Dockerfile to build its image.
