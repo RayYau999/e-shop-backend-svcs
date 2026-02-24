@@ -20,9 +20,14 @@ repositories {
 	mavenLocal()
 }
 
+ext {
+    set('springAiVersion', '1.0.0')
+}
+
 dependencyManagement {
 	imports {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:2024.0.0"
+        mavenBom "org.springframework.ai:spring-ai-bom:${springAiVersion}"
 	}
 }
 
@@ -66,6 +71,9 @@ dependencies {
 
     //mail
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    // Spring AI - MCP server (servlet/webmvc based)
+    implementation 'org.springframework.ai:spring-ai-starter-mcp-server-webmvc'
 }
 
 tasks.named('test') {

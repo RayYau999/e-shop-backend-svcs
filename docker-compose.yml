@@ -13,6 +13,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: devpassword
       ESHOP_LOGIN_SERVICE_URL: http://login:8080
       ESHOP_PYMT_SERVICE_URL: http://payment:8081
+      ESHOP_OLLAMA_URL: http://ollama:11434
     depends_on:
       - db
       - login
@@ -62,5 +63,22 @@ services:
       - db-data:/var/lib/mysql
       - ./data.sql:/docker-entrypoint-initdb.d/data.sql:ro
 
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    restart: unless-stopped
+    entrypoint: ["/bin/sh", "-c", "ollama serve & sleep 5 && ollama list | grep -q 'llama3.2' || ollama pull llama3.2:latest && wait && ollama run llama3.2:latest"]
+    deploy:
+      resources:
+        limits:
+          cpus: '5.0'
+          memory: 10g
+        reservations:
+          cpus: '3.0'
+          memory: 6g
 volumes:
   db-data:
+  ollama-data:

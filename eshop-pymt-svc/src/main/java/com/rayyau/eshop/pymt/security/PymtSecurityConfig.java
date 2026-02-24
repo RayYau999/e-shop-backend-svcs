@@ -84,6 +84,7 @@ public class PymtSecurityConfig {
                                 .requestMatchers("/login").permitAll()
                                 .requestMatchers("/webhook/paypal").permitAll()
                                 .requestMatchers("/kafka-test").permitAll() // for kafka testing purpose
+                                .requestMatchers("/sse/**","/mcp/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
