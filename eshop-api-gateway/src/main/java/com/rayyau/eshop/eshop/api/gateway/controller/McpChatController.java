@@ -1,16 +1,23 @@
 package com.rayyau.eshop.eshop.api.gateway.controller;
 
+import com.rayyau.eshop.eshop.api.gateway.dto.McpMessageRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+import java.util.Optional;
+
 @RequestMapping("mcp-chat")
 @RestController
+@Slf4j
 public class McpChatController {
     private final ChatClient chatClient;
 
@@ -23,12 +30,19 @@ public class McpChatController {
     }
 
     @PostMapping
-    public String chat(@RequestBody String message) {
-        System.out.println("all tools: " + syncMcpToolCallbackProvider.getToolCallbacks());
-        return chatClient.prompt()
-                .user(message)
+    public ResponseEntity<Map<String, String>> chat(@RequestBody McpMessageRequest request) {
+        log.info("show all tools: " + syncMcpToolCallbackProvider.getToolCallbacks());
+        log.info("received message: " + request.getMessage());
+        Optional<String> optResponseMessage = Optional.ofNullable(chatClient.prompt()
+                .user(request.getMessage())
                 .toolCallbacks(syncMcpToolCallbackProvider)
-                .call().content();
+                .call().content());
+        if(optResponseMessage.isEmpty()) {
+            return ResponseEntity.status(204).body(Map.of("mcpResponse", "AI returned no response"));
+        }
+        Map<String, String> responseMap = Map.of("mcpResponse", optResponseMessage.get());
+        log.info("response message: " + optResponseMessage);
+        return ResponseEntity.ok(responseMap);
     }
 }
 

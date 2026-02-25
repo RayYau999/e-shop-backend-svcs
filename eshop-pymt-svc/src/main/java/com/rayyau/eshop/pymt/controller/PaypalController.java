@@ -11,6 +11,7 @@ import com.rayyau.eshop.pymt.service.OrderService;
 import com.rayyau.eshop.pymt.service.PaymentService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +41,7 @@ import java.util.UUID;
 
 @RestController
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PaypalController {
     private final OrderService orderService;
     private final PaymentService paymentService;
@@ -49,8 +50,8 @@ public class PaypalController {
     private final Map<String, PaymentRecord> paymentStatuses = new ConcurrentHashMap<>();
     private final PaymentStatusRepository paymentStatusRepository;
 
-//    @Value("${spring.client.mail}")
-//    private String mailClient;
+    @Value("${spring.client.mail}")
+    private String mailClient;
 
     // PayPal webhook endpoint
     @PostMapping("/webhook/paypal")
@@ -143,7 +144,7 @@ public class PaypalController {
                     PaymentEvent paymentEvent = PaymentEvent.builder()
                             .paymentId(paymentStatusEntity.getPaymentId())
                             .status(paymentStatusEntity.getStatus().name())
-                            .email("example@gmail.com") //replace this with real client email, TODO: get from the user details in db
+                            .email(mailClient) //replace this with real client email, TODO: get from the user details in db
                             .amount(paymentStatusEntity.getAmount())
                             .currency(paymentStatusEntity.getCurrency())
                             .build();

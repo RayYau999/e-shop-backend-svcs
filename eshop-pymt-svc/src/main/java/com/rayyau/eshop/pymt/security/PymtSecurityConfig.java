@@ -85,6 +85,7 @@ public class PymtSecurityConfig {
                                 .requestMatchers("/webhook/paypal").permitAll()
                                 .requestMatchers("/kafka-test").permitAll() // for kafka testing purpose
                                 .requestMatchers("/sse/**","/mcp/**").permitAll()
+                                .requestMatchers("/actuator/health").permitAll() //check health without auth
                                 .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
