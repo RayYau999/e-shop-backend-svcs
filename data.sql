@@ -1,12 +1,13 @@
-CREATE TABLE orders (
+CREATE TABLE IF NOT EXISTS `orders` (
                         id BIGINT PRIMARY KEY AUTO_INCREMENT,
                         user_id BIGINT NOT NULL,
                         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                         total_price DOUBLE NOT NULL,
-                        status ENUM('PENDING', 'CONFIRMED') NOT NULL
+                        order_ref_id VARCHAR(100) NOT NULL UNIQUE,
+                        status ENUM('PENDING', 'CONFIRMED', 'COMPLETED', 'CANCELLED') NOT NULL
 );
 
-CREATE TABLE shipments (
+CREATE TABLE IF NOT EXISTS `shipments` (
                            id BIGINT PRIMARY KEY AUTO_INCREMENT,
                            product_id BIGINT NOT NULL,
                            price DOUBLE NOT NULL,
@@ -37,8 +38,8 @@ SET FOREIGN_KEY_CHECKS = 0;
 
 TRUNCATE TABLE `orders`;
 
-INSERT INTO orders (id, user_id, total_price, created_at)
-VALUES (1, 1, 20.00, CURRENT_TIMESTAMP);
+INSERT INTO orders (id, user_id, total_price, created_at, status)
+VALUES (1, 1, 20.00, CURRENT_TIMESTAMP, 'COMPLETED');
 
 ALTER TABLE `orders` AUTO_INCREMENT = 2;
 
@@ -53,7 +54,7 @@ VALUES (1001, 50.0, 2, 'PENDING', 1);
 
 SET FOREIGN_KEY_CHECKS = 1;
 
-CREATE TABLE payment_status (
+CREATE TABLE IF NOT EXISTS `payment_status` (
                                 id BIGINT PRIMARY KEY AUTO_INCREMENT,
                                 payment_id VARCHAR(100) NOT NULL UNIQUE,
                                 status VARCHAR(50) NOT NULL,
@@ -62,3 +63,10 @@ CREATE TABLE payment_status (
                                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS `products` (
+                              id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                              product_name VARCHAR(50) NOT NULL,
+                              price DOUBLE NOT NULL,
+                              image VARCHAR(255)
+)

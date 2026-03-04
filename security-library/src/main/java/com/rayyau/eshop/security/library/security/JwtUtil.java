@@ -15,13 +15,18 @@ public class JwtUtil {
         this.secretKey = secretKey;
     }
 
-    public String generate(String username, Integer ttlInMs) {
+    public String generate(String username, Integer ttlInMs, Long userId) {
         return Jwts.builder()
                 .subject(username)
+                .claim("userId", userId)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + ttlInMs))
                 .signWith(secretKey)
                 .compact();
+    }
+
+    public Long extractUserId(String token) throws JwtException {
+        return extractClaim(token, claims -> claims.get("userId", Long.class));
     }
 
     public String extractUsername(String token) throws JwtException {

@@ -10,6 +10,17 @@ $ docker run --name mysql \
    -p 3306:3306 \
    -d mysql:latest
 ```
+This command will run the data.sql script to initialize the database when the container is started.
+```
+ docker run --name mysql \
+  -e MYSQL_ROOT_PASSWORD=root \
+  -e MYSQL_DATABASE=demo-dev \
+  -e MYSQL_USER=devuser \
+  -e MYSQL_PASSWORD=devpassword \
+  -p 3306:3306 \
+  -v "$(pwd)/data.sql:/docker-entrypoint-initdb.d/01-init.sql" \
+  -d mysql:latest
+```
 2. It will create a database named demo-dev and a table named users with some sample data.
 
 
@@ -63,8 +74,12 @@ after you run step 1 and 2 once, you don't need to run them again. or else you m
 ### Build the container with docker compose
 1. docker compose (or docker-compose) reads a docker-compose.yml file that defines multiple services, 
 networks and volumes, then builds (if needed) and runs the containers together.
-
+2. ``` docker compose up --build -d``` 
+this command is for build the images (--build) and build the container with "up" command, and run in detached mode (-d).
 ### Note for dockerfile and docker compose
 1. Dockerfile is used to build a single image for a service.
 2. Docker Compose is used to define and run multi-container Docker applications.
 3. In this project, each microservice has its own Dockerfile to build its image.
+### Set env variable in local for development
+1. ```vi ~/.zshrc```
+2. add ```export RAYYAU_ESHOP_ENV=dev``` in the file and save it.

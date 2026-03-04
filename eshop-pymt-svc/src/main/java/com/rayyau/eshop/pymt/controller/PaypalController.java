@@ -16,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -96,8 +98,12 @@ public class PaypalController {
         //        PaymentRecord rec = paymentStatuses.get(paymentId);
         Optional<PaymentStatusEntity> rec = paymentStatusRepository.findByPaymentId(paymentId);
         if(rec.isPresent()) {
-            log.info("Found payment record: {}", rec);
-            return ResponseEntity.ok(rec.get());
+            if(rec.get().getStatus() == PaymentStatus.COMPLETED) {
+                log.info("Found payment record: {}", rec);
+                return ResponseEntity.ok(rec.get());
+            }
+            log.error("Found payment record but status is not completed: {}", rec);
+            return ResponseEntity.internalServerError().build();
         } else {
             log.info("No record found for payment ID: {}", paymentId);
             return ResponseEntity.notFound().build();

@@ -5,6 +5,7 @@ import com.rayyau.eshop.payment.library.dto.ProductDto;
 import com.rayyau.eshop.pymt.dto.Order;
 import com.rayyau.eshop.pymt.entity.OrderEntity;
 import com.rayyau.eshop.pymt.entity.ShipmentEntity;
+import com.rayyau.eshop.pymt.enumeration.OrderStatus;
 import com.rayyau.eshop.pymt.enumeration.ShipmentStatus;
 import com.rayyau.eshop.pymt.mapper.OrderMapper;
 import com.rayyau.eshop.pymt.repository.OrderRepository;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -61,5 +63,24 @@ public class OrderService {
         log.info("shipmentEntities: {}", shipmentEntities);
         shipmentRepository.saveAll(shipmentEntities);
 
+    }
+
+    @Transactional
+    public String saveNonPaidOrders(OrderDto orderDto, Long userId) {
+        log.info("saving non-paid orders for user with id: {}", userId);
+        log.info("order products: {}", orderDto.getProducts());
+
+        OrderEntity orderEntity = orderMapper.orderDtoToOrderEntity(orderDto);
+        orderEntity.setUserId(userId);
+        orderEntity.setOrderStatus(OrderStatus.PENDING);
+        String randomRefId = randomUuidNoHyphens();
+        orderEntity.setOrderRefId(randomRefId);
+        orderRepository.saveAndFlush(orderEntity);
+
+        return randomRefId;
+    }
+
+    private static String randomUuidNoHyphens() {
+        return UUID.randomUUID().toString().replace("-", "");
     }
 }

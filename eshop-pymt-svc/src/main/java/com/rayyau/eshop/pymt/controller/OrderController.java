@@ -1,7 +1,7 @@
 package com.rayyau.eshop.pymt.controller;
 
+import com.rayyau.eshop.payment.library.annotation.UserId;
 import com.rayyau.eshop.payment.library.dto.OrderDto;
-import com.rayyau.eshop.pymt.annotation.UserId;
 import com.rayyau.eshop.pymt.dto.Order;
 import com.rayyau.eshop.pymt.service.OrderService;
 import lombok.AllArgsConstructor;
@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -49,6 +51,20 @@ public class OrderController {
             // Log the exception (you can use a logging framework)
             log.error("Error adding order: {}", e.getMessage());
             return"Failed to add order: " + e.getMessage();
+        }
+    }
+
+    @PostMapping("/non-paid-orders")
+    ResponseEntity<Map<String, String>> setNonPaidOrders(@RequestBody OrderDto orderDto, @UserId Long userId) {
+        try{
+            String orderRefId = orderService.saveNonPaidOrders(orderDto, userId);
+            Map<String, String> responseMap  = new HashMap<>();
+            responseMap.put("message", "added");
+            responseMap.put("timestamp", String.valueOf(System.currentTimeMillis()));
+            responseMap.put("orderRefId", orderRefId);
+            return ResponseEntity.ok(responseMap);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of("message", "Failed to add non-paid orders: " + e.getMessage()));
         }
     }
 }
