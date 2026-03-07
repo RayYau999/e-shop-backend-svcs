@@ -1,6 +1,7 @@
 package com.rayyau.eshop.pymt.entity;
 
 import com.rayyau.eshop.pymt.enumeration.PaymentStatus;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -35,7 +36,6 @@ public class PaymentStatusEntity {
 
     private String currency;
 
-    @OneToOne
-    @JoinColumn(name = "order_id", nullable = false)
-    private OrderEntity order;
+    @Column(length = 100)
+    private String orderRefId;
 }

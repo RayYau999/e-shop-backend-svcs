@@ -34,6 +34,9 @@ public class OrderEntity {
     @Column(nullable = false)
     private Double totalPrice;
 
+    @Column(name = "purchased_products", nullable = false)
+    private String products; // string of purchased products with :<int> which represent the quantity, e.g. "productCode1:3", "productCode2:4",...
+
     @Column(nullable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;

@@ -1,12 +1,29 @@
 package com.rayyau.eshop.pymt.service;
 
+import com.rayyau.eshop.pymt.entity.ProductEntity;
+import com.rayyau.eshop.pymt.repository.ProductRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class ProductService {
+
+    private final ProductRepository productRepository;
+
+    public List<ProductEntity> getAllProductsOnSell() {
+        List<ProductEntity> productEntities = productRepository.findAllByIsOnSell(true);
+        if (productEntities.isEmpty()) {
+            throw new IllegalArgumentException("No products on sell");
+        } else {
+            return productEntities;
+        }
+    }
+
     @Tool(
             name = "get_all_products",
             description = "Returns the name, type, and price of all available products. " +
