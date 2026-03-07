@@ -19,9 +19,14 @@ repositories {
     mavenLocal()
 }
 
+ext {
+    set('springAiVersion', '1.0.0')
+}
+
 dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:2024.0.0"
+        mavenBom "org.springframework.ai:spring-ai-bom:${springAiVersion}"
     }
 }
 
@@ -52,6 +57,15 @@ dependencies {
 
     //openfeign for microservice communication
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+    // Spring AI - Ollama model integration
+    implementation 'org.springframework.ai:spring-ai-starter-model-ollama'
+
+    // Spring AI - MCP client
+    implementation 'org.springframework.ai:spring-ai-starter-mcp-client'
+
+    // Netty macOS DNS resolver (Apple Silicon)
+    runtimeOnly 'io.netty:netty-resolver-dns-native-macos:4.1.117.Final:osx-aarch_64'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'

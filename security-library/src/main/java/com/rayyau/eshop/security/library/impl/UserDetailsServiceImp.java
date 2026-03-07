@@ -1,5 +1,7 @@
 package com.rayyau.eshop.security.library.impl;
 
+import com.rayyau.eshop.security.library.Mapper.UserMapper;
+import com.rayyau.eshop.security.library.dto.UserDetailsWithoutPasswordDto;
 import com.rayyau.eshop.security.library.dto.UserEntity;
 import com.rayyau.eshop.security.library.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class UserDetailsServiceImp implements UserDetailsService {
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -24,4 +27,10 @@ public class UserDetailsServiceImp implements UserDetailsService {
                 .disabled(!user.isEnabled())
                 .build();
     }
+
+    public UserDetailsWithoutPasswordDto getUserDetailsWithoutPassword(String username) throws UsernameNotFoundException {
+        UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return userMapper.userEntityToUserDetailsDto(user);
+    }
+
 }

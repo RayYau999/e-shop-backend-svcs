@@ -45,6 +45,13 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.2.0'
 	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.12.5'
+
+    //for health check
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    //Mapstruct
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 }
 
 tasks.named('test') {

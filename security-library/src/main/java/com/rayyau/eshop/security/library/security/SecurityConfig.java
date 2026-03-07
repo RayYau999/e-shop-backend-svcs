@@ -86,6 +86,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         configurer -> configurer
                                 .requestMatchers("/login").permitAll()
+                                .requestMatchers("/actuator/health").permitAll() // Allow actuator health endpoint without authentication
                                 .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())

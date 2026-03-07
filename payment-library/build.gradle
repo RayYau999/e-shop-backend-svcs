@@ -55,6 +55,9 @@ dependencies {
 
     //add security library dependency
     implementation "com.rayyau.eshop:security-library${devName}:0.0.1-SNAPSHOT"
+
+    //for health check
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
 tasks.named('test') {

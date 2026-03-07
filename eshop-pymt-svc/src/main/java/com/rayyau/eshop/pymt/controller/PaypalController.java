@@ -2,22 +2,32 @@ package com.rayyau.eshop.pymt.controller;
 
 import com.rayyau.eshop.payment.library.annotation.UserId;
 import com.rayyau.eshop.payment.library.dto.OrderDto;
+import com.rayyau.eshop.payment.library.dto.ProductDto;
 import com.rayyau.eshop.pymt.dto.PaymentEvent;
 import com.rayyau.eshop.pymt.dto.PaymentStatusDto;
+import com.rayyau.eshop.pymt.entity.OrderEntity;
 import com.rayyau.eshop.pymt.entity.PaymentStatusEntity;
+import com.rayyau.eshop.pymt.enumeration.OrderStatus;
 import com.rayyau.eshop.pymt.enumeration.PaymentStatus;
+import com.rayyau.eshop.pymt.repository.OrderRepository;
 import com.rayyau.eshop.pymt.repository.PaymentStatusRepository;
 import com.rayyau.eshop.pymt.service.OrderService;
 import com.rayyau.eshop.pymt.service.PaymentService;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -40,17 +50,19 @@ import java.util.UUID;
 
 @RestController
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PaypalController {
     private final OrderService orderService;
     private final PaymentService paymentService;
+    private final OrderRepository orderRepository;
+    private final EntityManager entityManager;
 
     // In-memory store (replace with persistent storage in production)
     private final Map<String, PaymentRecord> paymentStatuses = new ConcurrentHashMap<>();
     private final PaymentStatusRepository paymentStatusRepository;
 
-//    @Value("${spring.client.mail}")
-//    private String mailClient;
+    @Value("${spring.client.mail}")
+    private String mailClient;
 
     // PayPal webhook endpoint
     @PostMapping("/webhook/paypal")
@@ -89,19 +101,40 @@ public class PaypalController {
     }
 
     // Optional: retrieve stored payment status
-    @GetMapping("/webhook/paypal/status/{paymentId}")
-    public ResponseEntity<PaymentStatusEntity> getStatus(@PathVariable String paymentId) {
+    @Transactional
+    @GetMapping("/webhook/paypal/status/{paymentId}/{orderRefId}")
+    public ResponseEntity<PaymentStatusEntity> getStatus(@PathVariable String paymentId, @PathVariable String orderRefId) {
         log.info("Retrieving status for payment ID2: {}", paymentId);
         //        PaymentRecord rec = paymentStatuses.get(paymentId);
         Optional<PaymentStatusEntity> rec = paymentStatusRepository.findByPaymentId(paymentId);
-        if(rec.isPresent()) {
-            log.info("Found payment record: {}", rec);
-            return ResponseEntity.ok(rec.get());
-        } else {
-            log.info("No record found for payment ID: {}", paymentId);
+        try {
+            if(rec.isPresent()) {
+                if(rec.get().getStatus() == PaymentStatus.COMPLETED) {
+                    // set the order status as paid in the order service
+                    OrderEntity order = orderRepository.findByOrderRefId(orderRefId)
+                            .orElseThrow(() -> new IllegalArgumentException("Order not found: " + orderRefId));
+                    order.setOrderStatus(OrderStatus.CONFIRMED);
+                    orderRepository.save(order);
+
+                    // set payment_status table order_ref_id
+                    PaymentStatusEntity paymentStatusEntity = rec.get();
+                    paymentStatusEntity.setOrderRefId(orderRefId);
+                    paymentStatusRepository.save(paymentStatusEntity);
+
+                    //response ok with the payment record
+                    log.info("Found payment record: {}", rec);
+                    return ResponseEntity.ok(rec.get());
+                }
+                log.error("Found payment record but status is not completed: {}", rec);
+                return ResponseEntity.internalServerError().build();
+            } else {
+                log.info("No record found for payment ID: {}", paymentId);
+                return ResponseEntity.notFound().build();
+            }
+        } catch (NullPointerException e) {
+            log.error("Order not found for orderRefId: {}", orderRefId);
             return ResponseEntity.notFound().build();
         }
-        //        return rec != null ? ResponseEntity.ok(rec) : ResponseEntity.notFound().build();
     }
 
     // DTOs (records require Java 16+; convert to classes if using older Java)
@@ -143,7 +176,7 @@ public class PaypalController {
                     PaymentEvent paymentEvent = PaymentEvent.builder()
                             .paymentId(paymentStatusEntity.getPaymentId())
                             .status(paymentStatusEntity.getStatus().name())
-                            .email("example@gmail.com") //replace this with real client email, TODO: get from the user details in db
+                            .email(mailClient) //replace this with real client email, TODO: get from the user details in db
                             .amount(paymentStatusEntity.getAmount())
                             .currency(paymentStatusEntity.getCurrency())
                             .build();
