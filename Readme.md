@@ -4,7 +4,7 @@
 ```
 $ docker run --name mysql \
    -e MYSQL_ROOT_PASSWORD=root \
-   -e MYSQL_DATABASE=demo-dev \
+   -e MYSQL_DATABASE=demo_dev \
    -e MYSQL_USER=devuser \
    -e MYSQL_PASSWORD=devpassword \
    -p 3306:3306 \
@@ -14,7 +14,7 @@ This command will run the data.sql script to initialize the database when the co
 ```
  docker run --name mysql \
   -e MYSQL_ROOT_PASSWORD=root \
-  -e MYSQL_DATABASE=demo-dev \
+  -e MYSQL_DATABASE=demo_dev \
   -e MYSQL_USER=devuser \
   -e MYSQL_PASSWORD=devpassword \
   -p 3306:3306 \
@@ -26,7 +26,7 @@ This command will run the data.sql script to initialize the database when the co
 
 ## Command you may need to run
 ### To access mysql db in docker container
-1. please run ```mysql -h localhost -P 3306 -u devuser -p demo-dev``` in exec mode
+1. please run ```mysql -h localhost -P 3306 -u devuser -p demo_dev``` in exec mode
 2. And the password of the DB is "devpassword"
 
 

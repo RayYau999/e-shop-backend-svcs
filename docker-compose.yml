@@ -8,7 +8,8 @@ services:
     ports:
       - "8083:8083"
     environment:
-      SPRING_DATASOURCE_URL: "jdbc:mysql://db:3306/demo_dev?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+      TZ: Asia/Hong_Kong
+      SPRING_DATASOURCE_URL: ${ESHOP_MYSQL_DATABASE_URL}
       SPRING_DATASOURCE_USERNAME: devuser
       SPRING_DATASOURCE_PASSWORD: devpassword
       ESHOP_LOGIN_SERVICE_URL: http://login:8080
@@ -36,7 +37,8 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: "jdbc:mysql://db:3306/demo_dev?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+      TZ: Asia/Hong_Kong
+      SPRING_DATASOURCE_URL: ${ESHOP_MYSQL_DATABASE_URL}
       SPRING_DATASOURCE_USERNAME: devuser
       SPRING_DATASOURCE_PASSWORD: devpassword
       ESHOP_PYMT_SERVICE_URL: http://payment:8081
@@ -60,7 +62,8 @@ services:
     ports:
       - "8081:8081"
     environment:
-      SPRING_DATASOURCE_URL: "jdbc:mysql://db:3306/demo_dev?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+      TZ: Asia/Hong_Kong
+      SPRING_DATASOURCE_URL: ${ESHOP_MYSQL_DATABASE_URL}
       SPRING_DATASOURCE_USERNAME: devuser
       SPRING_DATASOURCE_PASSWORD: devpassword
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
@@ -85,7 +88,8 @@ services:
     image: mysql:8.0
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: demo-dev
+      SPRING_DATASOURCE_URL: ${ESHOP_MYSQL_DATABASE_URL}
+      MYSQL_DATABASE: demo_dev
       MYSQL_USER: devuser
       MYSQL_PASSWORD: devpassword
       MYSQL_ROOT_PASSWORD: rootpassword
