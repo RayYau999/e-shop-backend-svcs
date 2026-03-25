@@ -14,11 +14,11 @@ import java.util.Date;
 @Service
 @AllArgsConstructor
 @Slf4j
+@CircuitBreaker(name = "loginService", fallbackMethod = "fallbackResponse")
+@Retry(name = "loginService")
 public class LoginService {
     private final LoginClient loginClient;
 
-    @CircuitBreaker(name = "loginService", fallbackMethod = "fallbackResponse")
-    @Retry(name = "loginService")
     public LoginResponse login(LoginRequest request) {
         log.info("logging in from api gateway");
         return loginClient.login(request);

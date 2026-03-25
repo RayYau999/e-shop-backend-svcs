@@ -1,85 +1,41 @@
-# Read this before jump into the project code
-1. There is a data.sql file in the eshop-login-svc module which will be executed when the mysql container is started. 
-2. run the following command to start a mysql container with the database and table created.
-```
-$ docker run --name mysql \
-   -e MYSQL_ROOT_PASSWORD=root \
-   -e MYSQL_DATABASE=demo_dev \
-   -e MYSQL_USER=devuser \
-   -e MYSQL_PASSWORD=devpassword \
-   -p 3306:3306 \
-   -d mysql:latest
-```
-This command will run the data.sql script to initialize the database when the container is started.
-```
- docker run --name mysql \
-  -e MYSQL_ROOT_PASSWORD=root \
-  -e MYSQL_DATABASE=demo_dev \
-  -e MYSQL_USER=devuser \
-  -e MYSQL_PASSWORD=devpassword \
-  -p 3306:3306 \
-  -v "$(pwd)/data.sql:/docker-entrypoint-initdb.d/01-init.sql" \
-  -d mysql:latest
-```
-2. It will create a database named demo-dev and a table named users with some sample data.
+How to start the applications?
+1. Go to the root directory of the project (e.g. e-shop-backend-svcs) and run ```docker compose up --build -d```
+2. If you need to try with the sandbox paypal payment? You can run ```./ngrok http 8081``` to expose the local pymt-service port 8081 to internet, and then use the ngrok url to set in paypal sandbox webhook setting. (e.g. https://xxxx-xx-xx-xx-xx.ngrok-free.app/webhook/paypal)
+   - "Apps and Credentials" -> Choose your appication -> add the path in "Sandbox Webhooks"
 
 
-## Command you may need to run
-### To access mysql db in docker container
-1. please run ```mysql -h localhost -P 3306 -u devuser -p demo_dev``` in exec mode
-2. And the password of the DB is "devpassword"
+Features:
+1. Microservices architecture:
+- eshop-api-gateway: It serves as the entry point for all client requests, routing them to the services / act as MCP client chatbot
+- eshop-login-svc: It handles user authentication and authorization, allowing users to log in and manage their accounts.
+- eshop-pymt-svc: It manages payment processing, including handling payment requests and integrating with payment gateways./ act as MCP server
+- payment-library: It provides common utilities and functions for payment processing, such as payment validation, transaction management, and integration with external payment providers.
+- security-library: It provides common security utilities and functions, such as jwtUtils, password hashing, token generation, and authentication/authorization mechanisms.
 
+2. Dockerization:
+- Each service is containerized using Docker, allowing for easy deployment and scalability.
+- Docker Compose is used to manage and orchestrate the multi-container application, making it easier to start and stop the entire application with a single command.
 
-### To publish to maven local
-```./gradlew publishToMavenLocal```
+3. Kafka and SMTP integration:
+- The application integrates with Kafka for event-driven communication between services, allowing for asynchronous processing and decoupling of services.
+- The application also integrates with an SMTP server for sending emails, such as order confirmations.
 
-## Kafka commands
-### Mainly base on document from https://kafka.apache.org/quickstart
-#### Kafka - start a kafka server in local (need java 17+)
-1. ```KAFKA_CLUSTER_ID="$(bin/kafka-storage.sh random-uuid)" ```
-2. ```bin/kafka-storage.sh format --standalone -t $KAFKA_CLUSTER_ID -c config/server.properties```
-3. ```bin/kafka-server-start.sh config/server.properties```, 
-after you run step 1 and 2 once, you don't need to run them again. or else you might need to delete the kafka log folder. ```rm -rf /tmp/kraft-combined-logs/*```
+4. MySQL database:
+- The application uses MySQL as the database to store user information, payment details, and other relevant data.
+- The database will run the prescript in data.sql file to create the necessary tables and insert sample data when the application starts.
 
-#### Kafka - start a kafka server in docker (need java 17+)
-1. What I do is install docker image by ```docker pull apache/kafka:4.1.0```
-2. Start the docker container by ```docker run -p 9092:9092 apache/kafka:4.1.0```
-#### Remark:
-1. You need to run the kafka cli command in the kafka directory if you run in local.
-2. This is for myself, where I put my kafka in 
-```cd Developer/kafka_2.13-4.1.0```
+5. Security:
+- The application implements security best practices, such as password hashing and JWT-based authentication, to protect user data and ensure secure communication between services.
+- The security-library provides common security utilities that can be used across all services to maintain a consistent security approach.
+- The password is hashed by BCrypt algorithm, which is a strong hashing algorithm that adds salt to the password before hashing, making it more resistant to brute-force attacks and rainbow table attacks.
+- JWT (JSON Web Token) is used for authentication and authorization. It allows the application to securely transmit information between parties as a JSON object, which can be verified and trusted because it is digitally signed. JWTs are commonly used for stateless authentication in web applications, allowing users to authenticate once and receive a token that can be used for subsequent requests without needing to re-authenticate.
+- The signature of JWT is encrypted by HMAC SHA256 algorithm, which is a widely used cryptographic hash function that provides a secure way to verify the integrity and authenticity of data. It uses a secret key to generate a unique hash value for the input data, making it resistant to tampering and forgery. In the context of JWT, HMAC SHA256 is used to sign the token, ensuring that it has not been altered and can be trusted by the receiving party.
 
-### Kafka - for my own project
-1. I added a topic named payment-events by running the api builded in 
+6. MCP (Model Context Protocol) integration:
+- The application integrates with MCP to enable communication between the eshop-api-gateway (acting as the MCP client) and the eshop-pymt-svc (acting as the MCP server).
+- MCP allows the client to get all the tools from the server through SSE (Server-Sent Events), although its better to use Spring webflux for this, but I want to embedded in this project so I choose to merge with SpringWebMVC.
 
-2. you can read the topic by running the following command
-``bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 \
---topic payment-events \
---from-beginning \
---property print.key=true \
---property print.value=true \
---property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer \
---property value.deserializer=org.apache.kafka.common.serialization.StringDeserializer``
-
-
-### Ngrok to expose pymt service to paypal webhook
-1. Download ngrok from https://ngrok.com/download
-2. run ```./ngrok http 8081``` to expose the local pymt-service port 8081 to internet
-
-### Build the image
-1. cd to the root directory (e.g. e-shop-backend-svcs) and run 
-```DOCKER_BUILDKIT=1 docker build --progress=plain -f eshop-api-gateway/Dockerfile -t eshop-api-gateway:latest .```
-2. It will use the eshop-api-gateway/Dockerfile to build the image from the root directory.
-
-### Build the container with docker compose
-1. docker compose (or docker-compose) reads a docker-compose.yml file that defines multiple services, 
-networks and volumes, then builds (if needed) and runs the containers together.
-2. ``` docker compose up --build -d``` 
-this command is for build the images (--build) and build the container with "up" command, and run in detached mode (-d).
-### Note for dockerfile and docker compose
-1. Dockerfile is used to build a single image for a service.
-2. Docker Compose is used to define and run multi-container Docker applications.
-3. In this project, each microservice has its own Dockerfile to build its image.
-### Set env variable in local for development
-1. ```vi ~/.zshrc```
-2. add ```export RAYYAU_ESHOP_ENV=dev``` in the file and save it.
+7. PayPal webhook integration:
+- The application integrates with PayPal's webhook to receive payment notifications and updates from PayPal.
+- This allows the application to process payment events in real-time and update the order status accordingly.
+- Ngrok is used to expose the local pymt-service port to the internet, allowing PayPal to send webhook notifications to the application during development and testing.
