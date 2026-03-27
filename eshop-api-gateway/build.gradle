@@ -24,9 +24,11 @@ ext {
 }
 
 dependencyManagement {
+    //Bom means Bill of Materials
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:2024.0.0"
         mavenBom "org.springframework.ai:spring-ai-bom:${springAiVersion}"
+        mavenBom "io.github.resilience4j:resilience4j-bom:2.4.0"
     }
 }
 
@@ -76,6 +78,17 @@ dependencies {
 //    implementation 'com.rayyau.eshop:security-library:0.0.1-SNAPSHOT'
     implementation "com.rayyau.eshop:security-library${devName}:0.0.1-SNAPSHOT"
     implementation "com.rayyau.eshop:payment-library${devName}:0.0.1-SNAPSHOT"
+
+    //resilience4j
+    implementation 'io.github.resilience4j:resilience4j-spring-boot3'
+    implementation 'io.github.resilience4j:resilience4j-circuitbreaker'
+    implementation 'io.github.resilience4j:resilience4j-retry'
+    implementation 'io.github.resilience4j:resilience4j-ratelimiter'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+    // 如果真的只想加 JUnit Jupiter API（不推薦單獨加）
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
 
 tasks.named('test') {
