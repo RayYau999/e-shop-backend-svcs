@@ -39,3 +39,8 @@ Features:
 - The application integrates with PayPal's webhook to receive payment notifications and updates from PayPal.
 - This allows the application to process payment events in real-time and update the order status accordingly.
 - Ngrok is used to expose the local pymt-service port to the internet, allowing PayPal to send webhook notifications to the application during development and testing.
+
+8. Resilience4j integration:
+- The application integrates with Resilience4j to provide fault tolerance and resilience in the face of failures and errors.
+- Resilience4j provides features such as circuit breakers, bulkhead, retries, and rate limiting, which can help improve the reliability and stability of the application.
+- I added the implementation of all resilience annotations in the eshop-api-gateway LoginController.java, and tested it with Jmeter (You may import EShop "Test Plan.jmx" to Jmeter and test the login api with multithread).
