@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -22,6 +23,7 @@ import java.util.List;
 @ComponentScan(basePackages = {"com.rayyau.eshop.security.library", "com.rayyau.eshop.eshop.api.gateway", "com.rayyau.eshop.payment.library"})
 @EnableJpaRepositories(basePackages = "com.rayyau.eshop.security.library.repository")
 @EntityScan(basePackages = "com.rayyau.eshop.security.library.dto")
+@EnableCaching
 public class EshopApiGatewayApplication {
 
 	public static void main(String[] args) {

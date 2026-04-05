@@ -24,6 +24,14 @@ public class ProductService {
         }
     }
 
+    public List<ProductEntity> addProductsOnSell(List<ProductEntity> products) throws RuntimeException {
+        try {
+            return productRepository.saveAll(products);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to add products on sell: " + e.getMessage());
+        }
+    }
+
     @Tool(
             name = "get_all_products",
             description = "Returns the name, type, and price of all available products. " +

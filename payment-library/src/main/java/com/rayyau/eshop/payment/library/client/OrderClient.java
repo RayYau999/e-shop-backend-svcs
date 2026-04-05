@@ -11,11 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@FeignClient(configuration = FeignConfig.class, name = "eshop-pymt-svc", url = "${eshop.pymt.service.url}")
+@FeignClient(configuration = FeignConfig.class, name = "eshop-pymt-svc", contextId = "eshopPymtOrderClient", url = "${eshop.pymt.service.url}")
 public interface OrderClient {
     @PostMapping("/add-orders")
     String addOrders(@RequestBody OrderDto orderDto, @RequestParam Long userId);
-
-    @GetMapping("/product/all-products-on-sell")
-    List<ProductCatalogDto> getAllProductsOnSell();
 }

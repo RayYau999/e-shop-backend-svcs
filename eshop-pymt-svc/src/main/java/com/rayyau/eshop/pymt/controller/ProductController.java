@@ -4,10 +4,13 @@ import com.rayyau.eshop.payment.library.dto.ProductCatalogDto;
 import com.rayyau.eshop.pymt.entity.ProductEntity;
 import com.rayyau.eshop.pymt.mapper.ProductMapper;
 import com.rayyau.eshop.pymt.service.ProductService;
+import com.sun.jdi.InternalException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,4 +36,18 @@ public class ProductController {
 //        return ResponseEntity.ok(productCatalogDtos);
         return productCatalogDtos;
     }
+
+    @PostMapping("/all-products-on-sell")
+    public List<ProductCatalogDto> addProductsOnSell(@RequestBody List<ProductCatalogDto> products) throws RuntimeException {
+        try {
+            log.info("addProductsOnSell running from product controller");
+            List<ProductEntity> productEntities = products.stream().map(productMapper::productCatalogDtoToProductEntity).toList();
+            productService.addProductsOnSell(productEntities);
+            return products;
+        } catch (Exception e) {
+            log.error("Error adding products on sell: {}", e.getMessage());
+            throw new RuntimeException("Failed to add products on sell");
+        }
+    }
 }
+

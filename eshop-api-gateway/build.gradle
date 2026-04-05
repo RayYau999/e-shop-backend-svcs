@@ -29,6 +29,7 @@ dependencyManagement {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:2024.0.0"
         mavenBom "org.springframework.ai:spring-ai-bom:${springAiVersion}"
         mavenBom "io.github.resilience4j:resilience4j-bom:2.4.0"
+        mavenBom "org.springframework:spring-framework-bom:6.2.17"
     }
 }
 
@@ -90,6 +91,9 @@ dependencies {
     // 如果真的只想加 JUnit Jupiter API（不推薦單獨加）
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+
+    //spring cache
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
 }
 
 tasks.named('test') {
