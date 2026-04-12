@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ollama-data-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi # 模型檔案較大，建議給 10G
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ollama
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ollama
+  template:
+    metadata:
+      labels:
+        app: ollama
+    spec:
+      containers:
+        - name: ollama
+          image: ollama/ollama:latest
+          ports:
+            - containerPort: 11434
+          # 這裡搬移你 Docker Compose 的 entrypoint 邏輯
+          command: ["/bin/sh", "-c"]
+          args:
+            - "ollama serve & sleep 5 && ollama pull llama3.2:latest && wait"
+          resources:
+            limits:
+              cpu: "6"
+              memory: "10Gi"
+            requests:
+              cpu: "3"
+              memory: "6Gi"
+          volumeMounts:
+            - name: ollama-storage
+              mountPath: /root/.ollama
+      volumes:
+        - name: ollama-storage
+          persistentVolumeClaim:
+            claimName: ollama-data-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ollama # 讓其他 App 用 http://ollama:11434 連線
+spec:
+  ports:
+    - port: 11434
+  selector:
+    app: ollama

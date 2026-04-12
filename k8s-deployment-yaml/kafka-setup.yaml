@@ -1,0 +1,73 @@
+# 第一部分：持久化空間 (PVC)
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: kafka-data-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+# 第二部分：無頭服務 (Headless Service)
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-svc
+spec:
+  clusterIP: None
+  selector:
+    app: kafka
+  ports:
+    - port: 9092
+      targetPort: 9092
+---
+# 第三部分：有狀態副本集 (StatefulSet)
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: kafka
+spec:
+  serviceName: "kafka-svc"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka
+  template:
+    metadata:
+      labels:
+        app: kafka
+    spec:
+      containers:
+        - name: kafka
+          image: apache/kafka:4.1.0
+          ports:
+            - containerPort: 9092
+          env:
+            - name: KAFKA_NODE_ID
+              value: "1"
+            - name: KAFKA_PROCESS_ROLES
+              value: "broker,controller"
+            - name: KAFKA_LISTENERS
+              value: "PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093"
+            # 這裡使用 K8s 內部的 FQDN (完整網域名稱)
+            - name: KAFKA_ADVERTISED_LISTENERS
+              value: "PLAINTEXT://kafka-0.kafka-svc:9092"
+            - name: KAFKA_CONTROLLER_QUORUM_VOTERS
+              value: "1@kafka-0.kafka-svc:9093"
+            - name: KAFKA_CONTROLLER_LISTENER_NAMES
+              value: "CONTROLLER"
+            - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
+              value: "PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT"
+            - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
+              value: "1"
+            - name: CLUSTER_ID
+              value: "MkU3OEVBNTcwNTJENDM2Qk"
+          volumeMounts:
+            - name: kafka-storage
+              mountPath: /var/lib/kafka/data
+      volumes:
+        - name: kafka-storage
+          persistentVolumeClaim:
+            claimName: kafka-data-pvc
