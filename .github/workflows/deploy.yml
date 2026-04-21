@@ -33,6 +33,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          clean: true
+
+      - name: Verify repository layout
+        run: |
+          echo "workspace=$GITHUB_WORKSPACE"
+          pwd
+          ls -la
+          [ -d payment-library ] && echo "OK payment-library" || (echo "MISSING payment-library" && exit 1)
+          [ -d security-library ] && echo "OK security-library" || (echo "MISSING security-library" && exit 1)
+          [ -d eshop-api-gateway ] && echo "OK eshop-api-gateway" || (echo "MISSING eshop-api-gateway" && exit 1)
 
       - name: Log in to GHCR
         uses: docker/login-action@v3
