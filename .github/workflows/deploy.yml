@@ -22,7 +22,13 @@ jobs:
     # 這裡定義你的服務清單
     strategy:
       matrix:
-        service: [login-service, payment-service, eshop-api-gateway]
+        include:
+          - dir: eshop-login-svc
+            image: login-service
+          - dir: eshop-pymt-svc
+            image: payment-service
+          - dir: eshop-api-gateway
+            image: eshop-api-gateway
 
     steps:
       - name: Checkout code
@@ -41,13 +47,12 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          context: ./${{ matrix.service }} # 假設你的 Dockerfile 在各服務資料夾內
+          context: ./${{ matrix.dir }}
+          file: ./${{ matrix.dir }}/Dockerfile
           push: true
-          # 如果是手動執行則用輸入的版本，否則用 git commit short sha
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/${{ matrix.service }}:${{ github.event.inputs.version || 'latest' }}
-            ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/${{ matrix.service }}:${{ github.sha }}
-
+            ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/${{ matrix.image }}:${{ github.event.inputs.version || 'latest' }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/${{ matrix.image }}:${{ github.sha }}
   deploy:
     needs: build-and-push
     runs-on: [self-hosted, backend-server]
