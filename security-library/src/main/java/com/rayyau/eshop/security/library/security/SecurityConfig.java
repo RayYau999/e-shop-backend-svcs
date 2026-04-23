@@ -86,6 +86,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         configurer -> configurer
                                 .requestMatchers("/login").permitAll()
+                                .requestMatchers("/login/github-action-testing").permitAll() //Allow testing without auth
                                 .requestMatchers("/actuator/health").permitAll() // Allow actuator health endpoint without authentication
                                 .anyRequest().authenticated()
                 )
