@@ -76,7 +76,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Deploy to K3s
+      - name: Deploy to K3s #set env vars and apply k8s yaml
         run: |
           set -e
           echo "PAYMENT_TAG=$PAYMENT_TAG"
