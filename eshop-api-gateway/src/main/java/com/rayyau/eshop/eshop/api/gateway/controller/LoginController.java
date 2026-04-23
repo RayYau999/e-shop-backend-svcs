@@ -35,6 +35,11 @@ public class LoginController {
         }
     }
 
+    @PostMapping("/login/github-action-testing")
+    public ResponseEntity<String> githubAction() {
+        return  ResponseEntity.ok("Github action successfully update and deploy to k3s");
+    }
+
     public ResponseEntity<LoginResponse>  loginControllerFallback(LoginRequest request, Throwable throwable) {
         log.error("fallback running from api gateway controller, date {}, error {}", new Date(), throwable.getMessage());
         return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
