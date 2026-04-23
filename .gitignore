@@ -10,4 +10,4 @@ out/
 ### ignore .env
 .env
 MyNotes.md
-＊.tar
+*.tar

@@ -78,7 +78,12 @@ jobs:
 
       - name: Deploy to K3s
         run: |
-          kubectl apply -f k8s-deployment-yaml/apps-deploy.yaml
+          set -e
+          echo "PAYMENT_TAG=$PAYMENT_TAG"
+          echo "LOGIN_TAG=$LOGIN_TAG"
+          echo "GATEWAY_TAG=$GATEWAY_TAG"
+          
+          envsubst < k8s-deployment-yaml/apps-deploy.yaml | kubectl apply -f -
 
           kubectl rollout restart deployment/login-service
           kubectl rollout restart deployment/payment-service

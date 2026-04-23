@@ -17,7 +17,7 @@ spec:
         - name: ghcr-auth
       containers:
         - name: payment
-          image: ghcr.io/rayyau999/payment-service:0.0.1
+          image: ghcr.io/rayyau999/payment-service:${PAYMENT_TAG}
           imagePullPolicy: IfNotPresent
           env:
             # 從 Secret 讀取完整的 DB URL (包含 Timezone 設定)
@@ -86,7 +86,7 @@ spec:
         - name: ghcr-auth
       containers:
         - name: login
-          image: ghcr.io/rayyau999/login-service:0.0.1
+          image: ghcr.io/rayyau999/login-service:${LOGIN_TAG}
           imagePullPolicy: IfNotPresent
           env:
             - name: SPRING_DATASOURCE_URL
@@ -137,7 +137,7 @@ spec:
         - name: ghcr-auth
       containers:
         - name: gateway
-          image: ghcr.io/rayyau999/eshop-api-gateway:0.0.1
+          image: ghcr.io/rayyau999/eshop-api-gateway:${GATEWAY_TAG}
           imagePullPolicy: IfNotPresent
           env:
             - name: ESHOP_LOGIN_SERVICE_URL
