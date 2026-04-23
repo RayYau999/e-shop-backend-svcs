@@ -72,6 +72,10 @@ jobs:
   deploy:
     needs: build-and-push
     runs-on: [self-hosted, backend-server]
+    env:
+      PAYMENT_TAG: ${{ github.sha }}
+      LOGIN_TAG: ${{ github.sha }}
+      GATEWAY_TAG: ${{ github.sha }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
