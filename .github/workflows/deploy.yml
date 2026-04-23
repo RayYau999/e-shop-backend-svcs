@@ -12,6 +12,10 @@ on:
         required: true
         default: '0.0.1'
 
+permissions:        # ← 加這裡
+  contents: read
+  packages: write
+
 env:
   REGISTRY: ghcr.io
   IMAGE_OWNER: rayyau999
