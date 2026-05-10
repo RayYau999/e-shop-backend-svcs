@@ -111,9 +111,9 @@ jobs:
           kubectl wait --for=condition=Ready pod -l app=kafka --timeout=300s
           kubectl wait --for=condition=Ready pod -l app=ollama --timeout=600s
           
-          kubectl run mysql-check --rm --restart=Never --image=busybox:1.36 -- sh -c 'nc -zvw5 db 3306'
-          kubectl run kafka-check --rm --restart=Never --image=busybox:1.36 -- sh -c 'nc -zvw5 kafka-svc 9092'
-          kubectl run ollama-check --rm --restart=Never --image=busybox:1.36 -- sh -c 'nc -zvw5 ollama 11434'
+          kubectl run mysql-check --rm -i --restart=Never --image=busybox:1.36 -- sh -c 'nc -zvw5 db 3306'
+          kubectl run kafka-check --rm -i --restart=Never --image=busybox:1.36 -- sh -c 'nc -zvw5 kafka-svc 9092'
+          kubectl run ollama-check --rm -i --restart=Never --image=busybox:1.36 -- sh -c 'nc -zvw5 ollama 11434'
           
           envsubst < k8s-deployment-yaml/apps-deploy.yaml | kubectl apply -f -
 
