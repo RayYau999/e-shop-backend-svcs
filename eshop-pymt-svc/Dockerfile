@@ -11,7 +11,7 @@ COPY security-library ./security-library
 COPY payment-library ./payment-library
 
 # ensure wrapper is executable and available with its gradle/wrapper JAR
-RUN chmod +x ./gradlew || true
+RUN chmod +x ./eshop-pymt-svc/gradlew
 
 # warm Gradle cache and verify wrapper
 RUN --mount=type=cache,target=/home/gradle/.gradle ./eshop-pymt-svc/gradlew --no-daemon --version
