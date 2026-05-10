@@ -88,6 +88,25 @@ jobs:
           echo "LOGIN_TAG=$LOGIN_TAG"
           echo "GATEWAY_TAG=$GATEWAY_TAG"
           
+          # apply base images
+          kubectl apply -f k8s-deployment-yaml/mysql-setup.yaml
+          kubectl apply -f k8s-deployment-yaml/kafka-setup.yaml
+          kubectl apply -f k8s-deployment-yaml/ollama-setup.yaml
+          
+          # wait for base images to be ready
+          kubectl rollout status deployment/mysql-db --timeout=300s
+          kubectl rollout status deployment/kafka --timeout=300s
+          kubectl rollout status deployment/ollama --timeout=600s
+
+          # healthy check
+          kubectl wait --for=condition=Ready pod -l app=mysql --timeout=300s
+          kubectl wait --for=condition=Ready pod -l app=kafka --timeout=300s
+          kubectl wait --for=condition=Ready pod -l app=ollama --timeout=600s
+          
+          kubectl run mysql-check --rm --restart=Never --image=busybox:1.36 -- sh -c 'nc -zvw5 db 3306'
+          kubectl run kafka-check --rm --restart=Never --image=busybox:1.36 -- sh -c 'nc -zvw5 kafka-svc 9092'
+          kubectl run ollama-check --rm --restart=Never --image=busybox:1.36 -- sh -c 'nc -zvw5 ollama 11434'
+          
           envsubst < k8s-deployment-yaml/apps-deploy.yaml | kubectl apply -f -
 
           kubectl rollout restart deployment/login-service
