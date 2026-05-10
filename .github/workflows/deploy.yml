@@ -99,7 +99,15 @@ jobs:
           kubectl rollout status deployment/ollama --timeout=600s
 
           # healthy check
-          kubectl wait --for=condition=Ready pod -l app=mysql --timeout=300s
+          kubectl wait --for=condition=Ready pod -l app=mysql --timeout=300s || {
+            echo "mysql-db rollout failed, dumping diagnostics..."
+            kubectl get pods -l app=mysql -o wide || true
+            kubectl describe pod -l app=mysql || true
+            kubectl get pvc mysql-pvc || true
+            kubectl describe pvc mysql-pvc || true
+            kubectl logs deployment/mysql-db --tail=200 || true
+            exit 1
+          }
           kubectl wait --for=condition=Ready pod -l app=kafka --timeout=300s
           kubectl wait --for=condition=Ready pod -l app=ollama --timeout=600s
           
