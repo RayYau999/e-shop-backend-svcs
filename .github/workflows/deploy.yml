@@ -95,7 +95,7 @@ jobs:
           
           # wait for base images to be ready
           kubectl rollout status deployment/mysql-db --timeout=300s
-          kubectl rollout status deployment/kafka --timeout=300s
+          kubectl rollout status statefulset/kafka --timeout=300s
           kubectl rollout status deployment/ollama --timeout=600s
 
           # healthy check test
