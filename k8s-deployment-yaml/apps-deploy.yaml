@@ -167,10 +167,10 @@ kind: Service
 metadata:
   name: gateway
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: gateway
   ports:
     - port: 8083
       targetPort: 8083
-      nodePort: 30083
+#      nodePort: 30083 # This is for service type is NodePort
