@@ -1,13 +1,27 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: strip-api
+  namespace: default
+spec:
+  stripPrefix:
+    prefixes:
+      - /api
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: main-ingress
+  namespace: default
   annotations:
-    kubernetes.io/ingress.class: traefik
+    # 綁定 Middleware，確保轉發給 Gateway 時移除 /api 前綴
+    traefik.ingress.kubernetes.io/router.middlewares: default-strip-api@kubernetescrd
 spec:
+  ingressClassName: traefik
   rules:
     - http:
         paths:
+          # 前端網頁服務
           - path: /
             pathType: Prefix
             backend:
@@ -15,6 +29,7 @@ spec:
                 name: my-web-service
                 port:
                   number: 8080
+          # API Gateway 服務
           - path: /api
             pathType: Prefix
             backend:
