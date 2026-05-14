@@ -120,3 +120,5 @@ jobs:
           kubectl rollout restart deployment/login-service
           kubectl rollout restart deployment/payment-service
           kubectl rollout restart deployment/api-gateway
+          
+          envsubst < k8s-deployment-yaml/traefik-ingress.yaml | kubectl apply -f -
