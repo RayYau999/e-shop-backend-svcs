@@ -26,9 +26,9 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: my-web-service
+                name: eshop-web-service
                 port:
-                  number: 8080
+                  number: 80
           # API Gateway 服務
           - path: /api
             pathType: Prefix
