@@ -63,7 +63,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration cfgRestricted = new CorsConfiguration();
-        cfgRestricted.setAllowedOrigins(List.of("http://localhost:3000"));
+        cfgRestricted.setAllowedOrigins(List.of("http://localhost:3000", "https://rayyau1999-profolio.site"));
         cfgRestricted.setAllowedMethods(List.of("GET","POST","OPTIONS"));
         cfgRestricted.setAllowedHeaders(List.of("Authorization","Content-Type","Accept"));
         cfgRestricted.setAllowCredentials(true);
