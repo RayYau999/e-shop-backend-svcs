@@ -37,3 +37,11 @@ spec:
                 name: gateway
                 port:
                   number: 8083
+          # PayPal Webhook
+          - path: /webhook/paypal
+            pathType: Exact
+            backend:
+              service:
+                name: payment
+                port:
+                  number: 8081
