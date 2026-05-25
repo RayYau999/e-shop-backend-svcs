@@ -55,16 +55,16 @@ public class OrderController {
     }
 
     @PostMapping("/non-paid-orders")
-    ResponseEntity<Map<String, String>> setNonPaidOrders(@RequestBody OrderDto orderDto, @UserId Long userId) {
-        try{
+    Map<String, String> setNonPaidOrders(@RequestBody OrderDto orderDto, @UserId Long userId) {
+        try {
             String orderRefId = orderService.saveNonPaidOrders(orderDto, userId);
-            Map<String, String> responseMap  = new HashMap<>();
+            Map<String, String> responseMap = new HashMap<>();
             responseMap.put("message", "added");
             responseMap.put("timestamp", String.valueOf(System.currentTimeMillis()));
             responseMap.put("orderRefId", orderRefId);
-            return ResponseEntity.ok(responseMap);
+            return responseMap;
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(Map.of("message", "Failed to add non-paid orders: " + e.getMessage()));
-        }
+            log.error("Error saving non-paid order: {}", e.getMessage());
+            throw new RuntimeException("Failed to save non-paid order", e);        }
     }
 }

@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/order")
 @Slf4j
@@ -25,5 +27,16 @@ public class OrderController {
     public ResponseEntity<String> placeOrder(@RequestBody @Valid OrderDto orderDto, @UserId Long userId) {
         log.info("order placing from api gateway controller");
         return ResponseEntity.ok(orderService.addOrder(orderDto, userId));
+    }
+
+    @PostMapping("/non-paid-orders")
+    ResponseEntity<Map<String, String>> setNonPaidOrders(@RequestBody OrderDto orderDto, @UserId Long userId) {
+        try {
+            log.info("order placing from api gateway controller");
+            return ResponseEntity.ok(orderService.setNonPaidOrders(orderDto, userId));
+        } catch (Exception e) {
+            log.error("Error saving non-paid order: {}", e.getMessage());
+            return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
+        }
     }
 }
