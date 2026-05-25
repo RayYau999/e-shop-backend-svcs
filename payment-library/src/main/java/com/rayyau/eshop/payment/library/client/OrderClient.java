@@ -19,5 +19,5 @@ public interface OrderClient {
     String addOrders(@RequestBody OrderDto orderDto, @RequestParam Long userId);
 
     @PostMapping("/non-paid-orders")
-    Map<String, String> setNonPaidOrders(@RequestBody OrderDto orderDto, @UserId Long userId);
+    Map<String, String> setNonPaidOrders(@RequestBody OrderDto orderDto, @RequestParam Long userId);
 }

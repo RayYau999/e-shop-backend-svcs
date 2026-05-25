@@ -55,7 +55,7 @@ public class OrderController {
     }
 
     @PostMapping("/non-paid-orders")
-    Map<String, String> setNonPaidOrders(@RequestBody OrderDto orderDto, @UserId Long userId) {
+    Map<String, String> setNonPaidOrders(@RequestBody OrderDto orderDto, @RequestParam Long userId) {
         try {
             String orderRefId = orderService.saveNonPaidOrders(orderDto, userId);
             Map<String, String> responseMap = new HashMap<>();
