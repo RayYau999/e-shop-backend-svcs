@@ -39,7 +39,7 @@ spec:
                   number: 8083
           # PayPal Webhook
           - path: /webhook/paypal
-            pathType: Exact
+            pathType: Prefix
             backend:
               service:
                 name: payment
