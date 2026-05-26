@@ -32,8 +32,9 @@ public class LoginService {
 
         Date currentDate = new Date();
 
+        log.error("服務暫時不可用，請稍後再試。");
         // 預設的備援回覆
-        return new LoginResponse("服務暫時不可用，請稍後再試。", currentDate, currentDate);
+        return new LoginResponse(null, currentDate, currentDate);
     }
 
     public LoginResponse loginBulkheadFallback(LoginRequest request, Throwable e) {
@@ -41,7 +42,8 @@ public class LoginService {
 
         Date currentDate = new Date();
 
+        log.error("系統繁忙，請稍後再試。");
         // 預設的備援回覆
-        return new LoginResponse("系統繁忙，請稍後再試。", currentDate, currentDate);
+        return new LoginResponse(null, currentDate, currentDate);
     }
 }
