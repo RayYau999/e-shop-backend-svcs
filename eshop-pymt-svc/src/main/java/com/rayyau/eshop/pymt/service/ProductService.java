@@ -21,7 +21,9 @@ import java.util.List;
 public class ProductService {
 
     private static final String MSFT_QUOTE_URL = "https://query1.finance.yahoo.com/v7/finance/quote?symbols=MSFT";
+    private static final String STOCK_API_USER_AGENT = "Mozilla/5.0";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    private static final HttpClient HTTP_CLIENT = HttpClient.newHttpClient();
     private final ProductRepository productRepository;
 
     public List<ProductEntity> getAllProductsOnSell() {
@@ -107,10 +109,10 @@ public class ProductService {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(MSFT_QUOTE_URL))
-                    .header("User-Agent", "Mozilla/5.0")
+                    .header("User-Agent", STOCK_API_USER_AGENT)
                     .GET()
                     .build();
-            String responseBody = HttpClient.newHttpClient()
+            String responseBody = HTTP_CLIENT
                     .send(request, HttpResponse.BodyHandlers.ofString())
                     .body();
             BigDecimal stockPrice = extractMsftStockPrice(responseBody);
